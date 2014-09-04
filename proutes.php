@@ -227,7 +227,7 @@ class Prouter {
 		$as = $options['as'];
 
 		$re = preg_replace_callback('/:([a-z]+)/', function($x) use ($options) {
-			$fmt = '[A-Za-z0-9\-_]+';
+			$fmt = '[A-Za-z0-9\-_\.]+'; /* default variable format */
 			if ( isset($options[$x[1] . '_format']) ){
 				$fmt = $options[$x[1] . '_format'];
 			}
