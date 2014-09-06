@@ -286,7 +286,7 @@ class Prouter {
 			$methods = array_filter($methods, function($x) use ($options) { return !in_array($x, $options['except']); });
 		}
 
-		$as_func = function(){
+		$as_func = function() use ($pattern) {
 			if ( func_num_args() == 0 ){
 				return prouter_generate_path("/$pattern");
 			} else {
