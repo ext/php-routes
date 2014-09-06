@@ -18,7 +18,7 @@ function prouter_generate_path($pattern, $obj=array()){
 	if ( !(is_array($obj) || is_object($obj)) ){
 		$args = func_get_args();
 		$args = array_splice($args, 1);
-		return preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
+		return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
 			return array_shift($args);
 		}, $pattern);
 	}
@@ -27,7 +27,7 @@ function prouter_generate_path($pattern, $obj=array()){
 		$obj = (object)$obj;
 	}
 
-	return preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
+	return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
 		$name = $match[1];
 		if ( !isset($obj->$name) ){
 			//prouter_caller_error("Undefined property \$$name", E_USER_ERROR);
@@ -288,9 +288,9 @@ class Prouter {
 
 		$as_func = function() use ($pattern) {
 			if ( func_num_args() == 0 ){
-				return prouter_generate_path("/$pattern");
+				return prouter_generate_path($pattern);
 			} else {
-				return call_user_func_array('prouter_generate_path', array_merge(["/$pattern/:id"], func_get_args()));
+				return call_user_func_array('prouter_generate_path', array_merge(["$pattern/:id"], func_get_args()));
 			}
 		};
 
