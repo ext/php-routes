@@ -16,8 +16,9 @@ function prouter_caller_error($message, $type){
 
 function prouter_generate_path($pattern, $obj=array()){
 	if ( !(is_array($obj) || is_object($obj)) ){
-		$args = array_splice(func_get_args(), 1);
-		return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
+		$args = func_get_args();
+		$args = array_splice($args, 1);
+		return preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
 			return array_shift($args);
 		}, $pattern);
 	}
@@ -26,7 +27,7 @@ function prouter_generate_path($pattern, $obj=array()){
 		$obj = (object)$obj;
 	}
 
-	return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
+	return preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
 		$name = $match[1];
 		if ( !isset($obj->$name) ){
 			//prouter_caller_error("Undefined property \$$name", E_USER_ERROR);
