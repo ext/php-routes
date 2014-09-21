@@ -87,6 +87,7 @@ class ProuterLeafContext {
 	}
 
 	public function method($pattern, $method, array $options=[]){
+		$pattern = ltrim($pattern, '/');
 		$default_to = $this->options['to'] . '#' . prouter_actionname($pattern);
 		$options = array_merge($this->options, ['to' => $default_to], $options);
 		$options = $this->fill_to($options);
