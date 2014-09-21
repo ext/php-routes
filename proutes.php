@@ -140,10 +140,11 @@ class Prouter {
 	}
 
 	public function print_routes(){
-		foreach ( $this->patterns as $cur ){
+		$func_width = array_reduce($this->patterns, function($max, $x){ return max($max, strlen($x[3]) + strlen($x[4])); }, 0) + 3;
+		foreach ( $this->patterns as $cur ) {
 			list($pattern, $_, $method, $controller, $action, $as) = $cur;
 			$func = "{$controller}#{$action}";
-			printf("%30.30s %-6s %-30s %-16s   %s\n",
+			printf("%30.30s %-6s %-30s %-{$func_width}s %s\n",
 						 preg_replace('/_path$/', '', $as),
 						 $method, $pattern, $func, $_);
 		}
