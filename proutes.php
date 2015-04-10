@@ -238,6 +238,10 @@ class Prouter {
 		}
 	}
 
+	public static function base_path(){
+		return '/';
+	}
+
 	public function generate_path($pattern, $obj=array()){
 		if ( !(is_array($obj) || is_object($obj)) ){
 			$args = func_get_args();
@@ -251,7 +255,7 @@ class Prouter {
 			$obj = (object)$obj;
 		}
 
-		return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
+		return static::base_path() . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
 			$name = $match[1];
 			if ( !isset($obj->$name) ){
 				return '';
