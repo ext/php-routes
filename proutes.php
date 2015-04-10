@@ -14,29 +14,6 @@ function prouter_caller_error($message, $type){
 	trigger_error($message, $type);
 }
 
-function prouter_generate_path($pattern, $obj=array()){
-	if ( !(is_array($obj) || is_object($obj)) ){
-		$args = func_get_args();
-		$args = array_splice($args, 1);
-		return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
-			return array_shift($args);
-		}, $pattern);
-	}
-
-	if ( is_array($obj) ){
-		$obj = (object)$obj;
-	}
-
-	return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
-		$name = $match[1];
-		if ( !isset($obj->$name) ){
-			//prouter_caller_error("Undefined property \$$name", E_USER_ERROR);
-			return '';
-		}
-		return $obj->$name;
-	}, $pattern);
-}
-
 class ProuterResourceContext {
 	protected $namespace;
 	protected $options;
@@ -261,6 +238,28 @@ class Prouter {
 		}
 	}
 
+	public function generate_path($pattern, $obj=array()){
+		if ( !(is_array($obj) || is_object($obj)) ){
+			$args = func_get_args();
+			$args = array_splice($args, 1);
+			return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
+			return array_shift($args);
+			}, $pattern);
+		}
+
+		if ( is_array($obj) ){
+			$obj = (object)$obj;
+		}
+
+		return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
+			$name = $match[1];
+			if ( !isset($obj->$name) ){
+				return '';
+			}
+			return $obj->$name;
+		}, $pattern);
+	}
+
 	/**
 	 * Convert a (resource) pattern to suitable path base.
 	 */
@@ -273,7 +272,7 @@ class Prouter {
 
 		if ( !is_array($as) ){
 			$func = function() use ($pattern) {
-				return call_user_func_array('prouter_generate_path', array_merge([$pattern], func_get_args()));
+				return call_user_func_array(array($this, 'generate_path'), array_merge([$pattern], func_get_args()));
 			};
 		} else {
 			$func = $as[1];
@@ -298,9 +297,9 @@ class Prouter {
 
 		$as_func = function() use ($pattern) {
 			if ( func_num_args() == 0 ){
-				return prouter_generate_path($pattern);
+				return $this->generate_path($pattern);
 			} else {
-				return call_user_func_array('prouter_generate_path', array_merge(["$pattern/:id"], func_get_args()));
+				return call_user_func_array(array($this, 'generate_path'), array_merge(["$pattern/:id"], func_get_args()));
 			}
 		};
 
