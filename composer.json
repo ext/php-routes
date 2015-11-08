@@ -1,0 +1,12 @@
+{
+    "name": "ext/php-routes",
+    "description": "Routing for MVC-ish projects",
+    "license": "BSD-3",
+    "authors": [
+        {
+            "name": "David Sveningsson",
+            "email": "ext@sidvind.com"
+        }
+    ],
+    "require": {}
+}
