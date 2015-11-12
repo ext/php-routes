@@ -1,14 +1,19 @@
 {
     "name": "ext/php-routes",
     "description": "Routing for MVC-ish projects",
-    "license": "BSD-3",
+    "license": "BSD-3-Clause",
+    "type": "library",
     "authors": [
         {
             "name": "David Sveningsson",
             "email": "ext@sidvind.com"
         }
     ],
-    "require": {},
+    "autoload": {
+        "psr-4": {
+            "Sidvind\\PHPRoutes\\": "src/"
+        }
+    },
     "bin": [
         "bin/php-routes"
     ]
