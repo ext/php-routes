@@ -16,7 +16,7 @@ function prouter_caller_error($message, $type){
 	trigger_error($message, $type);
 }
 
-class ProuterResourceContext {
+class RouterResourceContext {
 	protected $namespace;
 	protected $options;
 	protected $router;
@@ -28,17 +28,17 @@ class ProuterResourceContext {
 	}
 
 	public function members($callback){
-		$context = new ProuterLeafContext("{$this->namespace}/:id", $this->options, $this->router);
+		$context = new RouterLeafContext("{$this->namespace}/:id", $this->options, $this->router);
 		$callback($context);
 	}
 
 	public function collection($callback){
-		$context = new ProuterLeafContext("{$this->namespace}", $this->options, $this->router);
+		$context = new RouterLeafContext("{$this->namespace}", $this->options, $this->router);
 		$callback($context);
 	}
 }
 
-class ProuterLeafContext {
+class RouterLeafContext {
 	protected $namespace;
 	protected $options;
 	protected $router;
@@ -84,7 +84,7 @@ class ProuterLeafContext {
 	}
 };
 
-class ProuterNamespaceContext extends ProuterLeafContext {
+class RouterNamespaceContext extends RouterLeafContext {
 	public function resource($pattern, array $options=[], $callback=false){
 		$this->router->resource("{$this->namespace}/{$pattern}", array_merge($this->options, ['to' => $this->options['to'] . prouter_classname($pattern)], $options), $callback);
 	}
@@ -94,7 +94,7 @@ class ProuterNamespaceContext extends ProuterLeafContext {
 	}
 };
 
-class ProuterPattern {
+class RouterPattern {
 	public $pattern;
 	public $re;
 	public $as;
@@ -103,7 +103,7 @@ class ProuterPattern {
 	public $action;
 };
 
-class Prouter {
+class Router {
 	protected $patterns = array();
 	private $path_methods = array();
 
@@ -291,7 +291,7 @@ class Prouter {
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
 		$options = array_merge(['to' => prouter_classname($pattern)], $options);
-		$context = new ProuterResourceContext($pattern, $options, $this);
+		$context = new RouterResourceContext($pattern, $options, $this);
 
 		$methods = ['index', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
@@ -333,7 +333,7 @@ class Prouter {
 
 	public function scope($pattern, array $options, $callback){
 		$pattern = trim($pattern, '/');
-		$context = new ProuterNamespaceContext($pattern, array_merge(['to' => prouter_classname($pattern)], $options), $this);
+		$context = new RouterNamespaceContext($pattern, array_merge(['to' => prouter_classname($pattern)], $options), $this);
 
 		if ( $callback ){
 			$callback($context);

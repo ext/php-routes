@@ -13,7 +13,7 @@ if ( $argc == 1 ){
 	exit;
 }
 
-$router = new Prouter($argv[1]);
+$router = new Sidvind\PHPRoutes\Router($argv[1]);
 
 if ( $argc == 2 ){
 	$router->print_routes();
