@@ -1,5 +1,5 @@
 {
-    "name": "ext/php-routes",
+    "name": "sidvind/php-routes",
     "description": "Routing for MVC-ish projects",
     "license": "BSD-3-Clause",
     "type": "library",
