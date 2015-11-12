@@ -1,5 +1,7 @@
 <?php
 
+namespace Sidvind\PHPRoutes;
+
 function prouter_classname($str){
 	return implode('', array_map('ucfirst', explode('/', trim($str,'/'))));
 }
