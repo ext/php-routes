@@ -8,5 +8,8 @@
             "email": "ext@sidvind.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "bin": [
+        "bin/php-routes"
+    ]
 }

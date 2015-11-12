@@ -340,28 +340,3 @@ class Prouter {
 		}
 	}
 }
-
-if ( php_sapi_name() === 'cli' && basename($_SERVER['SCRIPT_NAME']) == basename(__FILE__) ){
-	if ( $argc == 1 ){
-		echo "usage: {$argv[0]} FILENAME [pattern..]\n";
-		exit;
-	}
-
-	$router = new Prouter($argv[1]);
-
-	if ( $argc == 2 ){
-		$router->print_routes();
-	} else {
-		var_dump($router->derp_path(7));
-
-		foreach ( array_slice($argv, 2) as $pattern ){
-			list($controller, $action, $args) = $router->match($pattern, 'GET');
-			if ( $controller ){
-				echo "$controller::$action(" . var_export($args, true) . ")\n";
-			} else {
-				echo "{$argv[0]}: pattern doesn't match any route.\n";
-				exit(1);
-			}
-		}
-	}
-}
