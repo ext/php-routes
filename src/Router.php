@@ -1,5 +1,7 @@
 <?php
 
+namespace Sidvind\PHPRoutes;
+
 function prouter_classname($str){
 	return implode('', array_map('ucfirst', explode('/', trim($str,'/'))));
 }
@@ -14,7 +16,7 @@ function prouter_caller_error($message, $type){
 	trigger_error($message, $type);
 }
 
-class ProuterResourceContext {
+class RouterResourceContext {
 	protected $namespace;
 	protected $options;
 	protected $router;
@@ -26,17 +28,17 @@ class ProuterResourceContext {
 	}
 
 	public function members($callback){
-		$context = new ProuterLeafContext("{$this->namespace}/:id", $this->options, $this->router);
+		$context = new RouterLeafContext("{$this->namespace}/:id", $this->options, $this->router);
 		$callback($context);
 	}
 
 	public function collection($callback){
-		$context = new ProuterLeafContext("{$this->namespace}", $this->options, $this->router);
+		$context = new RouterLeafContext("{$this->namespace}", $this->options, $this->router);
 		$callback($context);
 	}
 }
 
-class ProuterLeafContext {
+class RouterLeafContext {
 	protected $namespace;
 	protected $options;
 	protected $router;
@@ -82,7 +84,7 @@ class ProuterLeafContext {
 	}
 };
 
-class ProuterNamespaceContext extends ProuterLeafContext {
+class RouterNamespaceContext extends RouterLeafContext {
 	public function resource($pattern, array $options=[], $callback=false){
 		$this->router->resource("{$this->namespace}/{$pattern}", array_merge($this->options, ['to' => $this->options['to'] . prouter_classname($pattern)], $options), $callback);
 	}
@@ -92,7 +94,7 @@ class ProuterNamespaceContext extends ProuterLeafContext {
 	}
 };
 
-class ProuterPattern {
+class RouterPattern {
 	public $pattern;
 	public $re;
 	public $as;
@@ -101,7 +103,7 @@ class ProuterPattern {
 	public $action;
 };
 
-class Prouter {
+class Router {
 	protected $patterns = array();
 	private $path_methods = array();
 
@@ -289,7 +291,7 @@ class Prouter {
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
 		$options = array_merge(['to' => prouter_classname($pattern)], $options);
-		$context = new ProuterResourceContext($pattern, $options, $this);
+		$context = new RouterResourceContext($pattern, $options, $this);
 
 		$methods = ['index', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
@@ -331,35 +333,10 @@ class Prouter {
 
 	public function scope($pattern, array $options, $callback){
 		$pattern = trim($pattern, '/');
-		$context = new ProuterNamespaceContext($pattern, array_merge(['to' => prouter_classname($pattern)], $options), $this);
+		$context = new RouterNamespaceContext($pattern, array_merge(['to' => prouter_classname($pattern)], $options), $this);
 
 		if ( $callback ){
 			$callback($context);
-		}
-	}
-}
-
-if ( php_sapi_name() === 'cli' && basename($_SERVER['SCRIPT_NAME']) == basename(__FILE__) ){
-	if ( $argc == 1 ){
-		echo "usage: {$argv[0]} FILENAME [pattern..]\n";
-		exit;
-	}
-
-	$router = new Prouter($argv[1]);
-
-	if ( $argc == 2 ){
-		$router->print_routes();
-	} else {
-		var_dump($router->derp_path(7));
-
-		foreach ( array_slice($argv, 2) as $pattern ){
-			list($controller, $action, $args) = $router->match($pattern, 'GET');
-			if ( $controller ){
-				echo "$controller::$action(" . var_export($args, true) . ")\n";
-			} else {
-				echo "{$argv[0]}: pattern doesn't match any route.\n";
-				exit(1);
-			}
 		}
 	}
 }
