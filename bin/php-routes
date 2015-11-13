@@ -19,9 +19,13 @@ if ( $argc == 2 ){
 	$router->print_routes();
 } else {
 	foreach ( array_slice($argv, 2) as $pattern ){
-		list($controller, $action, $args) = $router->match($pattern, 'GET');
-		if ( $controller ){
-			echo "$controller::$action(" . var_export($args, true) . ")\n";
+		$match = $router->match($pattern, 'GET');
+		if ( $match ){
+			echo "Controller: {$match->controller}\n";
+			echo "Action: {$match->action}\n";
+			echo "Format: {$match->format}\n";
+			echo "Arguments:\n";
+			echo json_encode($match->args, JSON_PRETTY_PRINT);
 		} else {
 			echo "{$argv[0]}: pattern doesn't match any route.\n";
 			exit(1);

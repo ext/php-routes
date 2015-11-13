@@ -155,10 +155,10 @@ class Router {
 					}
 				}
 
-				return array($controller, $action, $match, $format);
+				return new RouterMatch($controller, $action, $match, $format);
 			}
 		}
-		return array(false, false, false, false);
+		return null;
 	}
 
 	protected function parse_to($str){
