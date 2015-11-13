@@ -18,8 +18,6 @@ $router = new Sidvind\PHPRoutes\Router($argv[1]);
 if ( $argc == 2 ){
 	$router->print_routes();
 } else {
-	var_dump($router->derp_path(7));
-
 	foreach ( array_slice($argv, 2) as $pattern ){
 		list($controller, $action, $args) = $router->match($pattern, 'GET');
 		if ( $controller ){
