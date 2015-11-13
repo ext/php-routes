@@ -290,7 +290,7 @@ class Router {
 
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
-		$options = array_merge(['to' => prouter_classname($pattern)], $options);
+		$options = array_merge(['to' => prouter_classname($pattern), 'as' => false], $options);
 		$context = new RouterResourceContext($pattern, $options, $this);
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
@@ -309,7 +309,10 @@ class Router {
 			}
 		};
 
-		$as_stem = static::path_function_base($pattern);
+		$as_stem = $options['as'];
+		if ( $as_stem === false ){
+			$as_stem = static::path_function_base($pattern);
+		}
 
 		foreach ( $methods as $m ){
 			$o = array_merge($options, ['to' => $options['to'] . '#' . $m]);
