@@ -139,10 +139,26 @@ class Router {
 				foreach ( $match as $k => $v ){
 					if ( is_numeric($k) ) unset($match[$k]);
 				}
-				return array($controller, $action, $match);
+
+				/* find if format suffix was specified */
+				$format = false;
+				if ( array_key_exists('format', $match) ){
+					$format = substr($match['format'], 1) /* remove dot */;
+					unset($match['format']);
+
+					/* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
+					switch ( $format ){
+						case 'html': $format = 'text/html'; break;
+						case 'json': $format = 'application/json'; break;
+						case 'md': $format = 'text/markdown'; break;
+						case 'txt': $format = 'text/plain'; break;
+					}
+				}
+
+				return array($controller, $action, $match, $format);
 			}
 		}
-		return array(false, false, false);
+		return array(false, false, false, false);
 	}
 
 	protected function parse_to($str){
@@ -224,6 +240,9 @@ class Router {
 			return "(?P<{$x[1]}>$fmt)";
 		}, $pattern);
 		preg_match_all('/:([a-z]+)/', $pattern, $args);
+
+		/* optional format suffix */
+		$re .= '(?P<format>\.\w+)?';
 
 		list($controller, $action) = $this->parse_to($options['to']);
 		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::path_function_name($as));
