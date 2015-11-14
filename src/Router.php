@@ -131,6 +131,12 @@ class Router {
 
 	public function match($url, $method=false){
 		$method = $method ?: $_SERVER['REQUEST_METHOD'];
+
+		/* handle HEAD as GET */
+		if ( $method === 'HEAD' ){
+			$method = 'GET';
+		}
+
 		foreach ( $this->patterns as $cur ){
 			list($pattern, $re, $cur_method, $controller, $action) = $cur;
 			if ( $cur_method !== $method ) continue;
