@@ -3,20 +3,6 @@
 require_once('proutes.php');
 
 class TestProuter extends Prouter {
-	public function test_pattern($pattern, $controller, $action){
-		$this->clear();
-
-		echo " - Testing '$pattern' .. ";
-		$this->method($pattern, 'GET', []);
-		list(,,, $actual[0], $actual[1]) = $this->patterns[0];
-		$expected = array($controller, $action);
-		if ( $actual != $expected ){
-			echo "failed\n     Expected:   $controller::$action\n     Actual:     {$actual[0]}::{$actual[1]}\n";
-		} else {
-			echo "ok\n";
-		}
-	}
-
 	function test_path($pattern, $expected, $named, $positional){
 		global $test_pattern_path;
 		$this->clear();
@@ -64,16 +50,6 @@ class TestProuter extends Prouter {
 };
 
 $router = new TestProuter();
-
-echo "Testing pattern\n";
-$router->test_pattern('', 'Index', 'index');
-$router->test_pattern('foo', 'Index', 'foo');
-$router->test_pattern('foo', 'Index', 'foo');
-$router->test_pattern('/foo', 'Index', 'foo');
-$router->test_pattern('foo/bar', 'Index', 'foo_bar');
-$router->test_pattern('foo/:id', 'Index', 'foo');
-$router->test_pattern('foo/:id/baz', 'Index', 'foo_baz');
-echo "\n";
 
 echo "Testing path functions\n";
 $router->test_path('foo', '/foo', [], []);
