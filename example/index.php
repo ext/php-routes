@@ -1,6 +1,6 @@
 <?php
 
-require('proutes.php');
+require __DIR__ . '/../vendor/autoload.php';
 
 class IndexController {
 	public function index(){
@@ -18,19 +18,18 @@ class PostController {
 	}
 }
 
-class MyRouter extends Prouter {
+class MyRouter extends Sidvind\PHPRoutes\Router {
 	public function dispatch($url, $method){
-		list($controller, $action, $args) = $this->match($url, $method);	
-		if ( !$controller ){
+		if ( $match = $this->match($url, $method) ){
+			$class = "{$match->controller}Controller";
+			$controller = new $class();
+			return call_user_func_array([$controller, $match->action], $match->args);
+		} else {
 			echo "no match\n";
 			return;
 		}
-		
-		$class = "{$controller}Controller";
-		$controller = new $class();
-		return call_user_func_array([$controller, $action], $args);
 	}
 }
 
-$router = new MyRouter('routes.php');
-$router->dispatch(isset($argv[1]) ? $argv[1] : '/', 'GET');	
+$router = new MyRouter(__DIR__ . '/routes.php');
+$router->dispatch(isset($argv[1]) ? $argv[1] : '/', 'GET');
