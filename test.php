@@ -3,17 +3,6 @@
 require_once('proutes.php');
 
 class TestProuter extends Prouter {
-	public function test_to($str, $controller, $action){
-		echo " - Testing '$str' .. ";
-		$actual = $this->parse_to($str);
-		$expected = array($controller, $action);
-		if ( $actual != $expected ){
-			echo "failed\n     Expected:   $controller::$action\n     Actual:     {$actual[0]}::{$actual[1]}\n";
-		} else {
-			echo "ok\n";
-		}
-	}
-
 	public function test_pattern($pattern, $controller, $action){
 		$this->clear();
 
@@ -25,7 +14,7 @@ class TestProuter extends Prouter {
 			echo "failed\n     Expected:   $controller::$action\n     Actual:     {$actual[0]}::{$actual[1]}\n";
 		} else {
 			echo "ok\n";
-		}		
+		}
 	}
 
 	function test_path($pattern, $expected, $named, $positional){
@@ -75,14 +64,6 @@ class TestProuter extends Prouter {
 };
 
 $router = new TestProuter();
-
-echo "Testing parsing 'to'\n";
-$router->test_to('', 'Index', 'index');
-$router->test_to('#', 'Index', 'index');
-$router->test_to('Foo', 'Foo', 'index');
-$router->test_to('#foo', 'Index', 'foo');
-$router->test_to('Foo#bar', 'Foo', 'bar');
-echo "\n";
 
 echo "Testing pattern\n";
 $router->test_pattern('', 'Index', 'index');
