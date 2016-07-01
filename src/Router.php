@@ -253,7 +253,7 @@ class Router {
 		list($controller, $action) = $this->parse_to($options['to']);
 		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::path_function_name($as));
 
-		$this->add_path_function($pattern, $as);
+		return $this->add_path_function($pattern, $as);
 	}
 
 	private static function path_function_name($as){
@@ -310,7 +310,10 @@ class Router {
 		}
 
 		$func_name = static::path_function_name($as);
-		$this->path_methods[$func_name] = \Closure::bind($func, $this, get_class($this));
+		$callable = \Closure::bind($func, $this, get_class($this));
+		$this->path_methods[$func_name] = $callable;
+
+		return $callable;
 	}
 
 	public function resource($pattern, array $options=array(), $callback=false){
