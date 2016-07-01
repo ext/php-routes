@@ -3,32 +3,6 @@
 require_once('proutes.php');
 
 class TestProuter extends Prouter {
-	function test_path($pattern, $expected, $named, $positional){
-		global $test_pattern_path;
-		$this->clear();
-
-		$this->method($pattern, 'GET', ['as' => 'test_pattern']);
-		echo "  - Testing '$pattern' .. ";
-		if ( !(isset($test_pattern_path) && is_callable($test_pattern_path)) ){
-			echo "failed\n      No function defined\n";
-			return;
-		}
-
-		$actual = $test_pattern_path($named);
-		if ( $actual != $expected ){
-			echo "failed (named args)\n      Expected:   $expected\n      Actual:     $actual\n";
-			return;
-		}
-
-		$actual = call_user_func_array($test_pattern_path, $positional);
-		if ( $actual != $expected ){
-			echo "failed (positional)\n      Expected:   $expected\n      Actual:     $actual\n";
-			return;
-		}
-
-		echo "ok\n";
-	}
-
 	function test_match($pattern, $method, $expected_controller, $expected_action, array $expected_args=[]){
 		echo "  - Testing $method '$pattern' .. ";
 		list($actual_controller, $actual_action, $args) = $this->match($pattern, $method);
@@ -50,12 +24,6 @@ class TestProuter extends Prouter {
 };
 
 $router = new TestProuter();
-
-echo "Testing path functions\n";
-$router->test_path('foo', '/foo', [], []);
-$router->test_path('foo/:id', '/foo/7', ['id' => 7], [7]);
-$router->test_path('foo/:id/baz/:spam', '/foo/7/baz/ham', ['id' => 7, 'spam' => 'ham'], [7, 'ham']);
-echo "\n";
 
 echo "Testing dispatching\n";
 $router->clear();
