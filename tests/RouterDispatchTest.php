@@ -73,6 +73,16 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertMatch('/en/bar', 'GET', 'Test', 'action', ['lang' => 'en']);
 	}
 
+	public function test_resource(){
+		$this->router->resource('article');
+		$this->assertMatch('/article', 'GET', 'Article', 'list');
+		$this->assertMatch('/article', 'POST', 'Article', 'create');
+		$this->assertMatch('/article/7', 'GET', 'Article', 'show', ['id' => 7]);
+		$this->assertMatch('/article/7', 'PUT', 'Article', 'update', ['id' => 7]);
+		$this->assertMatch('/article/7', 'PATCH', 'Article', 'update', ['id' => 7]);
+		$this->assertMatch('/article/7', 'DELETE', 'Article', 'destroy', ['id' => 7]);
+	}
+
 	protected function assertMatch($url, $method, $controller, $action, array $args=[]){
 		$match = $this->router->match($url, $method);
 		$this->assertTrue((boolean)$match, "URL {$url} should match a route");
