@@ -59,6 +59,20 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('application/json', $match->format);
 	}
 
+	public function test_scope(){
+		$this->router->scope('foo', [], function($r){
+			$r->method('bar', 'GET', ['to' => 'Test#action']);
+		});
+		$this->assertMatch('/foo/bar', 'GET', 'Test', 'action');
+	}
+
+	public function test_scope_variable(){
+		$this->router->scope(':lang', [], function($r){
+			$r->method('bar', 'GET', ['to' => 'Test#action']);
+		});
+		$this->assertMatch('/en/bar', 'GET', 'Test', 'action', ['lang' => 'en']);
+	}
+
 	protected function assertMatch($url, $method, $controller, $action, array $args=[]){
 		$match = $this->router->match($url, $method);
 		$this->assertTrue((boolean)$match, "URL {$url} should match a route");
