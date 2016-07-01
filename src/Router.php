@@ -285,7 +285,7 @@ class Router {
 		return static::base_path() . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
 			$name = $match[1];
 			if ( !isset($obj->$name) ){
-				return '';
+				throw new \BadFunctionCallException("Missing argument {$name}");
 			}
 			return $obj->$name;
 		}, $pattern);
