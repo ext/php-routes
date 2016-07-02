@@ -71,4 +71,9 @@ class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->expectException(\BadFunctionCallException::class);
 		$this->router->foo_path();
 	}
+
+	public function test_call_missing(){
+		$this->expectException(\PHPUnit_Framework_Error::class);
+		$this->router->foo_path();
+	}
 }
