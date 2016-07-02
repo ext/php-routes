@@ -15,22 +15,12 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_simple(){
 		$this->router->method('foo', 'GET', ['to' => 'Test#action']);
-		$match = $this->router->match('/foo', 'GET');
-		$this->assertTrue((boolean)$match);
-		$this->assertEquals('Test', $match->controller);
-		$this->assertEquals('action', $match->action);
-		$this->assertEquals([], $match->args);
-		$this->assertEquals(false, $match->format);
+		$this->assertMatch('/foo', 'GET', 'Test', 'action');
 	}
 
 	public function test_method(){
 		$this->router->method('foo', 'PATCH', ['to' => 'Test#action']);
-		$match = $this->router->match('/foo', 'PATCH');
-		$this->assertTrue((boolean)$match);
-		$this->assertEquals('Test', $match->controller);
-		$this->assertEquals('action', $match->action);
-		$this->assertEquals([], $match->args);
-		$this->assertEquals(false, $match->format);
+		$this->assertMatch('/foo', 'PATCH', 'Test', 'action');
 	}
 
 	public function test_head(){
@@ -47,12 +37,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_args(){
 		$this->router->method('foo/:id', 'GET', ['to' => 'Test#action']);
-		$match = $this->router->match('/foo/7', 'GET');
-		$this->assertTrue((boolean)$match);
-		$this->assertEquals('Test', $match->controller);
-		$this->assertEquals('action', $match->action);
-		$this->assertEquals(['id' => 7], $match->args);
-		$this->assertEquals(false, $match->format);
+		$this->assertMatch('/foo/7', 'GET', 'Test', 'action', ['id' => 7]);
 	}
 
 	public function test_format(){
