@@ -83,10 +83,28 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	public function test_scope_nested(){
 		$this->router->scope('foo', [], function($r){
 			$r->scope('bar', [], function($r){
-				$r->method('baz', 'GET', ['to' => 'Test#action']);
+				$r->method('spam', 'GET', ['to' => 'Test#action']);
+				$r->method('ham', 'GET', []);
 			});
 		});
-		$this->assertMatch('/foo/bar/baz', 'GET', 'Test', 'action');
+		$this->assertMatch('/foo/bar/spam', 'GET', 'Test', 'action');
+		$this->assertMatch('/foo/bar/ham', 'GET', 'Index', 'ham');
+	}
+
+	public function test_scope_nested_to(){
+		$this->router->scope('foo', [], function($r){
+			$r->scope('bar', ['to' => 'Bar'], function($r){
+				$r->method('baz', 'GET', []);
+			});
+		});
+		$this->assertMatch('/foo/bar/baz', 'GET', 'Bar', 'baz');
+	}
+
+	public function test_scope_resource_to(){
+		$this->router->scope('admin', ['to' => 'Admin'], function($r){
+			$r->resource('post');
+		});
+		$this->assertMatch('/admin/post', 'GET', 'AdminPost', 'list');
 	}
 
 	public function test_scope_resource(){
