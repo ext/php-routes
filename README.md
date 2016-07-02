@@ -37,6 +37,7 @@ $scope(':lang', [], function($r){
 Create a dispatcher:
 
 ```php
+<?php
 class Dispatcher extends Sidvind\PHPRoutes\Router {
 	public function dispatch($url, $method){
 		if ( $match = $this->match($url, $method) ){
@@ -50,4 +51,22 @@ class Dispatcher extends Sidvind\PHPRoutes\Router {
 }
 $router = new Dispatcher('routes.php');
 $router->dispatch($url, $method);
+```
+
+To preview/debug routes use `bin/php-routes`:
+
+```
+# bin/php-routes routes.php
+        GET    /foo             MyController#foo      #^/foo(?P<format>\.\w+)?$#
+        POST   /bar/:id/baz     MyController#update   #^/bar/(?P<id>[A-Za-z0-9\-_\.]+)/baz(?P<format>\.\w+)?$#
+article GET    /article         Article#list          #^/article(?P<format>\.\w+)?$#
+...
+# bin/php-routes routes.php get /foo
+Controller: MyController
+Action: foo
+Format:
+Arguments:
+[]
+# bin/php-routes routes.php get /bar
+bin/php-routes: url doesn't match any route.
 ```
