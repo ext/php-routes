@@ -59,6 +59,16 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('application/json', $match->format);
 	}
 
+	public function test_format_mimetype(){
+		$this->router->method('foo', 'GET', ['to' => 'Test#action']);
+		$this->assertEquals('text/html', $this->router->match('/foo.html', 'GET')->format);
+		$this->assertEquals('application/json', $this->router->match('/foo.json', 'GET')->format);
+		$this->assertEquals('text/markdown', $this->router->match('/foo.md', 'GET')->format);
+		$this->assertEquals('text/plain', $this->router->match('/foo.txt', 'GET')->format);
+		$this->assertEquals('application/xml', $this->router->match('/foo.xml', 'GET')->format);
+		$this->assertEquals('image/svg+xml', $this->router->match('/foo.svg', 'GET')->format);
+	}
+
 	public function test_scope(){
 		$this->router->scope('foo', [], function($r){
 			$r->method('bar', 'GET', ['to' => 'Test#action']);

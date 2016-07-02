@@ -57,6 +57,8 @@ class Router {
 						case 'json': $format = 'application/json'; break;
 						case 'md': $format = 'text/markdown'; break;
 						case 'txt': $format = 'text/plain'; break;
+						case 'xml': $format = 'application/xml'; break;
+						case 'svg': $format = 'image/svg+xml'; break;
 					}
 				}
 
