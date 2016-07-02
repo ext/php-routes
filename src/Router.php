@@ -69,8 +69,8 @@ class Router {
 	}
 
 	protected function parse_to($str){
-		if ( !preg_match('/([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+))?/', $str, $match) ){
-			return ['Index', 'index'];
+		if ( !preg_match('/^([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+)?)?$/', $str, $match) ){
+			throw new \BadFunctionCallException("Malformed 'to'");
 		}
 		array_shift($match);
 		switch ( count($match) ){

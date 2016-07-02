@@ -33,4 +33,9 @@ class RouterToTest extends PHPUnit_Framework_TestCase {
 	public function test_controller_action(){
 		$this->assertEquals(['Foo', 'bar'], $this->router->parse_to('Foo#bar'));
 	}
+
+	public function test_malformed2(){
+		$this->expectException(\BadFunctionCallException::class);
+		$this->assertEquals(['Index', 'index'], $this->router->parse_to('foo##bar'));
+	}
 }
