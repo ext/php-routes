@@ -21,6 +21,10 @@ class LeafContext {
 		$this->method($pattern, 'POST', $options);
 	}
 
+	public function patch($pattern, array $options=[]){
+		$this->method($pattern, 'PATCH', $options);
+	}
+
 	public function put($pattern, array $options=[]){
 		$this->method($pattern, 'PUT', $options);
 	}
