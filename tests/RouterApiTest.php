@@ -31,4 +31,13 @@ class RouterApiFunctionTest extends \PHPUnit_Framework_TestCase {
 	public function test_format_routes_empty(){
 		$this->assertEquals('', $this->router->format_routes());
 	}
+
+	public function test_print_routes_empty(){
+		$this->router->method('foo', 'GET', []);
+		ob_start();
+		$this->router->print_routes();
+		$string = ob_get_contents();
+		ob_end_clean();
+		$this->assertStringEqualsFile(__DIR__ . "/formatted.txt", $this->router->format_routes());
+	}
 }
