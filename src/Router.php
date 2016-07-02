@@ -217,7 +217,11 @@ class Router {
 
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
-		$options = array_merge(['to' => Utils::classname($pattern), 'as' => false], $options);
+		$options = array_merge([
+			'to' => Utils::classname($pattern),
+			'as' => false,
+			'id_format' => '\d+',
+		], $options);
 		$context = new ResourceContext($pattern, $options, $this);
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];

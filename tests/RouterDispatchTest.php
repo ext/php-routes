@@ -84,7 +84,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_resource_collection(){
-		$this->router->resource('article', ['id_format' => '\d+'], function($r){
+		$this->router->resource('article', [], function($r){
 			$r->collection(function($r){
 				$r->delete('delete');
 				$r->get('get');
@@ -101,7 +101,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_resource_member(){
-		$this->router->resource('article', ['id_format' => '\d+'], function($r){
+		$this->router->resource('article', [], function($r){
 			$r->members(function($r){
 				$r->delete('delete');
 				$r->get('get');
