@@ -83,6 +83,27 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertMatch('/en/bar', 'GET', 'Test', 'action', ['lang' => 'en']);
 	}
 
+	public function test_scope_nested(){
+		$this->router->scope('foo', [], function($r){
+			$r->scope('bar', [], function($r){
+				$r->method('baz', 'GET', ['to' => 'Test#action']);
+			});
+		});
+		$this->assertMatch('/foo/bar/baz', 'GET', 'Test', 'action');
+	}
+
+	public function test_scope_resource(){
+		$this->router->scope('foo', [], function($r){
+			$r->resource('article');
+		});
+		$this->assertMatch('/foo/article', 'GET', 'Article', 'list');
+		$this->assertMatch('/foo/article', 'POST', 'Article', 'create');
+		$this->assertMatch('/foo/article/7', 'GET', 'Article', 'show', ['id' => 7]);
+		$this->assertMatch('/foo/article/7', 'PUT', 'Article', 'update', ['id' => 7]);
+		$this->assertMatch('/foo/article/7', 'PATCH', 'Article', 'update', ['id' => 7]);
+		$this->assertMatch('/foo/article/7', 'DELETE', 'Article', 'destroy', ['id' => 7]);
+	}
+
 	public function test_resource(){
 		$this->router->resource('article');
 		$this->assertMatch('/article', 'GET', 'Article', 'list');
