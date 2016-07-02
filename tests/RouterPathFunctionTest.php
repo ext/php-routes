@@ -36,7 +36,7 @@ class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase {
 	public function test_missing_args(){
 		$func = $this->path_function('foo/:id');
 		$this->expectException(\BadFunctionCallException::class);
-		$this->assertEquals('/foo/:id', $func());
+		$func();
 	}
 
 	public function test_multiple_args(){
@@ -44,5 +44,31 @@ class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals('/foo/3/baz/4', $func(3, 4));
 		$this->assertEquals('/foo/3/baz/4', $func(['id' => 3, 'spam' => 4]));
 		$this->assertEquals('/foo/3/baz/4', $func((object)['id' => 3, 'spam' => 4]));
+	}
+
+	public function test_call_no_args(){
+		$this->router->method('foo', 'GET', ['as' => 'foo']);
+		$this->assertEquals('/foo', $this->router->foo_path());
+	}
+
+	public function test_call_positional_args(){
+		$this->router->method('foo/:a/:b', 'GET', ['as' => 'foo']);
+		$this->assertEquals('/foo/1/2', $this->router->foo_path(1,2));
+	}
+
+	public function test_call_named_args(){
+		$this->router->method('foo/:a/:b', 'GET', ['as' => 'foo']);
+		$this->assertEquals('/foo/2/1', $this->router->foo_path(['b' => 1, 'a' => 2]));
+	}
+
+	public function test_call_object_args(){
+		$this->router->method('foo/:a/:b', 'GET', ['as' => 'foo']);
+		$this->assertEquals('/foo/2/1', $this->router->foo_path((object)['b' => 1, 'a' => 2]));
+	}
+
+	public function test_call_missing_args(){
+		$this->router->method('foo/:id', 'GET', ['as' => 'foo']);
+		$this->expectException(\BadFunctionCallException::class);
+		$this->router->foo_path();
 	}
 }
