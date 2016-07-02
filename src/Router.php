@@ -18,17 +18,11 @@ class Router {
 	}
 
 	public function format_routes(){
-		$output = '';
-		$func_width = array_reduce($this->patterns, function($max, $x){ return max($max, strlen($x[3]) + strlen($x[4])); }, 0) + 3;
+		$formatter = new RouteFormatter();
 		foreach ( $this->patterns as $cur ) {
-			list($pattern, $_, $method, $controller, $action, $as) = $cur;
-			$func = "{$controller}#{$action}";
-			$output .= sprintf("%30.30s %-6s %-30s %-{$func_width}s %s\n",
-				preg_replace('/_path$/', '', $as),
-				$method, $pattern, $func, $_
-			);
+			$formatter->add($cur);
 		}
-		return $output;
+		return (string)$formatter;
 	}
 
 	public function print_routes(){
