@@ -269,7 +269,10 @@ class Router {
 
 	public function scope($pattern, array $options, $callback){
 		$pattern = trim($pattern, '/');
-		$context = new ScopeContext($pattern, array_merge(['to' => Utils::classname($pattern)], $options), $this);
+		$defaults = [
+			'to' => false,
+		];
+		$context = new ScopeContext($pattern, array_merge($defaults, $options), $this);
 
 		if ( $callback ){
 			$callback($context);

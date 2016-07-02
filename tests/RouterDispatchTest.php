@@ -15,7 +15,9 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_simple(){
 		$this->router->method('foo', 'GET', ['to' => 'Test#action']);
+		$this->router->method('bar', 'GET', []);
 		$this->assertMatch('/foo', 'GET', 'Test', 'action');
+		$this->assertMatch('/bar', 'GET', 'Index', 'bar');
 	}
 
 	public function test_method(){
@@ -63,15 +65,19 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	public function test_scope(){
 		$this->router->scope('foo', [], function($r){
 			$r->method('bar', 'GET', ['to' => 'Test#action']);
+			$r->method('baz', 'GET', []);
 		});
 		$this->assertMatch('/foo/bar', 'GET', 'Test', 'action');
+		$this->assertMatch('/foo/baz', 'GET', 'Index', 'baz');
 	}
 
 	public function test_scope_variable(){
 		$this->router->scope(':lang', [], function($r){
 			$r->method('bar', 'GET', ['to' => 'Test#action']);
+			$r->method('baz', 'GET', []);
 		});
 		$this->assertMatch('/en/bar', 'GET', 'Test', 'action', ['lang' => 'en']);
+		$this->assertMatch('/en/baz', 'GET', 'Index', 'baz', ['lang' => 'en']);
 	}
 
 	public function test_scope_nested(){
