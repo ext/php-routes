@@ -87,13 +87,13 @@ class Router {
 
 	public function __call($method, $args){
 		if ( isset($this->path_methods[$method]) && is_callable($this->path_methods[$method]) ){
-      return call_user_func_array($this->path_methods[$method], $args);
-    }
+			return call_user_func_array($this->path_methods[$method], $args);
+		}
 
 		$trace = debug_backtrace();
 		$class = get_class($this);
-    trigger_error("Call to undefined method $class::$method from {$trace[0]['file']} on line {$trace[0]['line']}", E_USER_ERROR);
-    return null;
+		trigger_error("Call to undefined method $class::$method from {$trace[0]['file']} on line {$trace[0]['line']}", E_USER_ERROR);
+		return null;
 	}
 
 	/**
