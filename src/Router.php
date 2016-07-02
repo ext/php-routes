@@ -2,20 +2,6 @@
 
 namespace Sidvind\PHPRoutes;
 
-function prouter_classname($str){
-	return implode('', array_map('ucfirst', explode('/', trim($str,'/'))));
-}
-
-function prouter_actionname($str){
-	return preg_replace('#/?([^/]+).*#', '\1', $str);
-}
-
-function prouter_caller_error($message, $type){
-  $stack = debug_backtrace();
-  $message .= ", called from {$stack[4]['file']}:{$stack[4]['line']}";
-	trigger_error($message, $type);
-}
-
 class Router {
 	protected $patterns = array();
 	private $path_methods = array();
@@ -231,7 +217,7 @@ class Router {
 
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
-		$options = array_merge(['to' => prouter_classname($pattern), 'as' => false], $options);
+		$options = array_merge(['to' => Utils::classname($pattern), 'as' => false], $options);
 		$context = new RouterResourceContext($pattern, $options, $this);
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
@@ -277,7 +263,7 @@ class Router {
 
 	public function scope($pattern, array $options, $callback){
 		$pattern = trim($pattern, '/');
-		$context = new RouterScopeContext($pattern, array_merge(['to' => prouter_classname($pattern)], $options), $this);
+		$context = new RouterScopeContext($pattern, array_merge(['to' => Utils::classname($pattern)], $options), $this);
 
 		if ( $callback ){
 			$callback($context);

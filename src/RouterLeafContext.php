@@ -31,7 +31,7 @@ class RouterLeafContext {
 
 	public function method($pattern, $method, array $options=[]){
 		$pattern = ltrim($pattern, '/');
-		$default_to = $this->options['to'] . '#' . prouter_actionname($pattern);
+		$default_to = $this->options['to'] . '#' . Utils::actionname($pattern);
 		$options = array_merge($this->options, ['to' => $default_to], $options);
 		$options = $this->fill_to($options);
 		$this->router->method("{$this->namespace}/{$pattern}", $method, $options);
