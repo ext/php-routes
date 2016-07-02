@@ -229,10 +229,10 @@ class Router {
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
-			$methods = $options['only'];
+			$methods = Utils::filter_only($methods, $options['only']);
 		}
 		if ( isset($options['except']) ){
-			$methods = array_filter($methods, function($x) use ($options) { return !in_array($x, $options['except']); });
+			$methods = Utils::filter_except($methods, $options['except']);
 		}
 
 		$as_func = function() use ($pattern) {
