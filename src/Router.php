@@ -2,107 +2,6 @@
 
 namespace Sidvind\PHPRoutes;
 
-function prouter_classname($str){
-	return implode('', array_map('ucfirst', explode('/', trim($str,'/'))));
-}
-
-function prouter_actionname($str){
-	return preg_replace('#/?([^/]+).*#', '\1', $str);
-}
-
-function prouter_caller_error($message, $type){
-  $stack = debug_backtrace();
-  $message .= ", called from {$stack[4]['file']}:{$stack[4]['line']}";
-	trigger_error($message, $type);
-}
-
-class RouterResourceContext {
-	protected $namespace;
-	protected $options;
-	protected $router;
-
-	public function __construct($namespace, array $options, $router){
-		$this->namespace = $namespace;
-		$this->options = $options;
-		$this->router = $router;
-	}
-
-	public function members($callback){
-		$context = new RouterLeafContext("{$this->namespace}/:id", $this->options, $this->router);
-		$callback($context);
-	}
-
-	public function collection($callback){
-		$context = new RouterLeafContext("{$this->namespace}", $this->options, $this->router);
-		$callback($context);
-	}
-}
-
-class RouterLeafContext {
-	protected $namespace;
-	protected $options;
-	protected $router;
-
-	public function __construct($namespace, array $options, $router){
-		$this->namespace = $namespace;
-		$this->options = $options;
-		$this->router = $router;
-	}
-
-	public function get($pattern, array $options=[]){
-		$this->method($pattern, 'GET', $options);
-	}
-
-	public function post($pattern, array $options=[]){
-		$this->method($pattern, 'POST', $options);
-	}
-
-	public function put($pattern, array $options=[]){
-		$this->method($pattern, 'PUT', $options);
-	}
-
-	public function delete($pattern, array $options=[]){
-		$this->method($pattern, 'DELETE', $options);
-	}
-
-	public function method($pattern, $method, array $options=[]){
-		$pattern = ltrim($pattern, '/');
-		$default_to = $this->options['to'] . '#' . prouter_actionname($pattern);
-		$options = array_merge($this->options, ['to' => $default_to], $options);
-		$options = $this->fill_to($options);
-		$this->router->method("{$this->namespace}/{$pattern}", $method, $options);
-	}
-
-	/**
-	 * If 'to' is '#foo' it fills the controller from context.
-	 */
-	protected function fill_to($options){
-		if ( $options['to'][0] == '#' ){
-			$options['to'] = $this->options['to'] . $options['to'];
-		}
-		return $options;
-	}
-};
-
-class RouterNamespaceContext extends RouterLeafContext {
-	public function resource($pattern, array $options=[], $callback=false){
-		$this->router->resource("{$this->namespace}/{$pattern}", array_merge($this->options, ['to' => $this->options['to'] . prouter_classname($pattern)], $options), $callback);
-	}
-
-	public function scope($pattern, array $options=[], $callback=false){
-		$this->router->scope("{$this->namespace}/$pattern", array_merge($this->options, ['to' => $this->options['to'] . prouter_classname($pattern)], $options), $callback);
-	}
-};
-
-class RouterPattern {
-	public $pattern;
-	public $re;
-	public $as;
-	public $method;
-	public $controller;
-	public $action;
-};
-
 class Router {
 	protected $patterns = array();
 	private $path_methods = array();
@@ -253,7 +152,7 @@ class Router {
 		list($controller, $action) = $this->parse_to($options['to']);
 		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::path_function_name($as));
 
-		$this->add_path_function($pattern, $as);
+		return $this->add_path_function($pattern, $as);
 	}
 
 	private static function path_function_name($as){
@@ -285,7 +184,7 @@ class Router {
 		return static::base_path() . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
 			$name = $match[1];
 			if ( !isset($obj->$name) ){
-				return '';
+				throw new \BadFunctionCallException("Missing argument {$name}");
 			}
 			return $obj->$name;
 		}, $pattern);
@@ -310,13 +209,16 @@ class Router {
 		}
 
 		$func_name = static::path_function_name($as);
-		$this->path_methods[$func_name] = \Closure::bind($func, $this, get_class($this));
+		$callable = \Closure::bind($func, $this, get_class($this));
+		$this->path_methods[$func_name] = $callable;
+
+		return $callable;
 	}
 
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
-		$options = array_merge(['to' => prouter_classname($pattern), 'as' => false], $options);
-		$context = new RouterResourceContext($pattern, $options, $this);
+		$options = array_merge(['to' => Utils::classname($pattern), 'as' => false], $options);
+		$context = new ResourceContext($pattern, $options, $this);
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
@@ -361,7 +263,7 @@ class Router {
 
 	public function scope($pattern, array $options, $callback){
 		$pattern = trim($pattern, '/');
-		$context = new RouterNamespaceContext($pattern, array_merge(['to' => prouter_classname($pattern)], $options), $this);
+		$context = new ScopeContext($pattern, array_merge(['to' => Utils::classname($pattern)], $options), $this);
 
 		if ( $callback ){
 			$callback($context);

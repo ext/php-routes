@@ -1,0 +1,11 @@
+language: php
+php:
+  - '5.6'
+  - '7.0'
+  - hhvm
+install:
+  - composer install
+script:
+  - tests/phpunit --coverage-clover clover.xml
+after_success:
+  - travis_retry php vendor/bin/coveralls
