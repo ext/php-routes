@@ -1,6 +1,12 @@
 #!/usr/bin/env php
 <?php
 
+function usage(){
+	global $argv;
+	echo "usage: {$argv[0]} FILENAME METHOD URL\n";
+	exit;
+}
+
 /* hack to find composer autoloader, kind of stolen from phpunit  */
 foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../../vendor/autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
 	if (file_exists($file)) {
@@ -8,27 +14,29 @@ foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../../vendor/auto
 	}
 }
 
-if ( $argc == 1 ){
-	echo "usage: {$argv[0]} FILENAME [pattern..]\n";
-	exit;
+if ( $argc === 1 ){
+	usage();
 }
 
-$router = new Sidvind\PHPRoutes\Router($argv[1]);
+$filename = $argv[1];
+$router = new Sidvind\PHPRoutes\Router($filename);
 
-if ( $argc == 2 ){
+if ( $argc === 2 ){
 	$router->print_routes();
-} else {
-	foreach ( array_slice($argv, 2) as $pattern ){
-		$match = $router->match($pattern, 'GET');
-		if ( $match ){
-			echo "Controller: {$match->controller}\n";
-			echo "Action: {$match->action}\n";
-			echo "Format: {$match->format}\n";
-			echo "Arguments:\n";
-			echo json_encode($match->args, JSON_PRETTY_PRINT);
-		} else {
-			echo "{$argv[0]}: pattern doesn't match any route.\n";
-			exit(1);
-		}
+} else if ( $argc == 4 ){
+	$method = strtoupper($argv[2]);
+	$url = $argv[3];
+	$match = $router->match($url, $method);
+	if ( $match ){
+		echo "Controller: {$match->controller}\n";
+		echo "Action: {$match->action}\n";
+		echo "Format: {$match->format}\n";
+		echo "Arguments:\n";
+		echo json_encode($match->args, JSON_PRETTY_PRINT);
+	} else {
+		echo "{$argv[0]}: url doesn't match any route.\n";
+		exit(1);
 	}
+} else {
+	usage();
 }
