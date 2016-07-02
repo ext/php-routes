@@ -37,7 +37,7 @@ class Router {
 		}
 
 		foreach ( $this->patterns as $cur ){
-			list($pattern, $re, $cur_method, $controller, $action) = $cur;
+			list(, $re, $cur_method, $controller, $action) = $cur;
 			if ( $cur_method !== $method ) continue;
 
 			if ( preg_match($re, $url, $match) ){
