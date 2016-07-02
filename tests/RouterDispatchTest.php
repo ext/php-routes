@@ -33,6 +33,12 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertEquals(false, $match->format);
 	}
 
+	public function test_head(){
+		$this->router->method('foo', 'GET', ['to' => 'Test#action']);
+		$this->assertMatch('/foo', 'GET', 'Test', 'action');
+		$this->assertMatch('/foo', 'HEAD', 'Test', 'action');
+	}
+
 	public function test_wrong_method(){
 		$this->router->method('foo', 'PATCH', ['to' => 'Test#action']);
 		$match = $this->router->match('/foo', 'GET');
