@@ -218,7 +218,7 @@ class Router {
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
 		$options = array_merge(['to' => Utils::classname($pattern), 'as' => false], $options);
-		$context = new RouterResourceContext($pattern, $options, $this);
+		$context = new ResourceContext($pattern, $options, $this);
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
@@ -263,7 +263,7 @@ class Router {
 
 	public function scope($pattern, array $options, $callback){
 		$pattern = trim($pattern, '/');
-		$context = new RouterScopeContext($pattern, array_merge(['to' => Utils::classname($pattern)], $options), $this);
+		$context = new ScopeContext($pattern, array_merge(['to' => Utils::classname($pattern)], $options), $this);
 
 		if ( $callback ){
 			$callback($context);

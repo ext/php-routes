@@ -15,7 +15,10 @@
     },
     "autoload": {
         "psr-4": {
-            "Sidvind\\PHPRoutes\\": "src/"
+            "Sidvind\\PHPRoutes\\": [
+                "src/",
+                "src/context"
+            ]
         }
     },
     "bin": [

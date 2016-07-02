@@ -2,7 +2,7 @@
 
 namespace Sidvind\PHPRoutes;
 
-class RouterResourceContext {
+class ResourceContext {
 	protected $namespace;
 	protected $options;
 	protected $router;
@@ -14,12 +14,12 @@ class RouterResourceContext {
 	}
 
 	public function members($callback){
-		$context = new RouterLeafContext("{$this->namespace}/:id", $this->options, $this->router);
+		$context = new LeafContext("{$this->namespace}/:id", $this->options, $this->router);
 		$callback($context);
 	}
 
 	public function collection($callback){
-		$context = new RouterLeafContext("{$this->namespace}", $this->options, $this->router);
+		$context = new LeafContext("{$this->namespace}", $this->options, $this->router);
 		$callback($context);
 	}
 }

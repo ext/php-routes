@@ -2,7 +2,7 @@
 
 namespace Sidvind\PHPRoutes;
 
-class RouterLeafContext {
+class LeafContext {
 	protected $namespace;
 	protected $options;
 	protected $router;
