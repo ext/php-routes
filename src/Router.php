@@ -17,15 +17,22 @@ class Router {
 		include $filename;
 	}
 
-	public function print_routes(){
+	public function format_routes(){
+		$output = '';
 		$func_width = array_reduce($this->patterns, function($max, $x){ return max($max, strlen($x[3]) + strlen($x[4])); }, 0) + 3;
 		foreach ( $this->patterns as $cur ) {
 			list($pattern, $_, $method, $controller, $action, $as) = $cur;
 			$func = "{$controller}#{$action}";
-			printf("%30.30s %-6s %-30s %-{$func_width}s %s\n",
-						 preg_replace('/_path$/', '', $as),
-						 $method, $pattern, $func, $_);
+			$output .= sprintf("%30.30s %-6s %-30s %-{$func_width}s %s\n",
+				preg_replace('/_path$/', '', $as),
+				$method, $pattern, $func, $_
+			);
 		}
+		return $output;
+	}
+
+	public function print_routes(){
+		echo $this->format_routes();
 	}
 
 	public function match($url, $method=false){
