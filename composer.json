@@ -1,6 +1,7 @@
 {
     "name": "sidvind/php-routes",
-    "description": "Routing for MVC-ish projects",
+    "description": "Routing for PHP projects",
+    "keywords": ["route", "routing", "dispatch", "rest"],
     "license": "BSD-3-Clause",
     "type": "library",
     "authors": [
