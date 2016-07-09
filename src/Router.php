@@ -218,6 +218,10 @@ class Router {
 		return $callable;
 	}
 
+	public function context(){
+		return new RootContext($this);
+	}
+
 	public function resource($pattern, array $options=array(), $callback=false){
 		$pattern = trim($pattern, '/');
 		$options = array_merge([
