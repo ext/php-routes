@@ -218,6 +218,18 @@ class Router {
 		return $callable;
 	}
 
+	protected static function resource_to($method, $options){
+		$prefix = $options['to'];
+		switch ( $method ){
+			case 'list':
+				return "{$prefix}#index";
+			case 'new':
+				return "{$prefix}#make";
+			default:
+				return "{$prefix}#{$method}";
+		}
+	}
+
 	public function context(){
 		return new RootContext($this);
 	}
@@ -231,7 +243,7 @@ class Router {
 		], $options);
 		$context = new ResourceContext($pattern, $options, $this);
 
-		$methods = ['index', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
+		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
 			$methods = Utils::filter_only($methods, $options['only']);
 		}
@@ -253,9 +265,9 @@ class Router {
 		}
 
 		foreach ( $methods as $m ){
-			$o = array_merge($options, ['to' => $options['to'] . '#' . $m]);
+			$o = array_merge($options, ['to' => static::resource_to($m, $options)]);
 			switch ( $m ){
-				case 'index':   $this->method("/$pattern",          'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
+				case 'list':   $this->method("/$pattern",           'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
 				case 'create':  $this->method("/$pattern",          'POST',   array_merge($o, ['as' => "create_{$as_stem}"])); break;
 				case 'new':     $this->method("/$pattern/new",      'GET',    array_merge($o, ['as' => "new_{$as_stem}"])); break;
 				case 'edit':    $this->method("/$pattern/:id/edit", 'GET',    array_merge($o, ['as' => "edit_{$as_stem}"])); break;
