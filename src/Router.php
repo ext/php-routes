@@ -231,7 +231,7 @@ class Router {
 		], $options);
 		$context = new ResourceContext($pattern, $options, $this);
 
-		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
+		$methods = ['index', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
 			$methods = Utils::filter_only($methods, $options['only']);
 		}
@@ -255,7 +255,7 @@ class Router {
 		foreach ( $methods as $m ){
 			$o = array_merge($options, ['to' => $options['to'] . '#' . $m]);
 			switch ( $m ){
-				case 'list':    $this->method("/$pattern",          'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
+				case 'index':   $this->method("/$pattern",          'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
 				case 'create':  $this->method("/$pattern",          'POST',   array_merge($o, ['as' => "create_{$as_stem}"])); break;
 				case 'new':     $this->method("/$pattern/new",      'GET',    array_merge($o, ['as' => "new_{$as_stem}"])); break;
 				case 'edit':    $this->method("/$pattern/:id/edit", 'GET',    array_merge($o, ['as' => "edit_{$as_stem}"])); break;

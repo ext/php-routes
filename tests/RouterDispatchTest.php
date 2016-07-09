@@ -104,14 +104,14 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->router->scope('admin', ['to' => 'Admin'], function($r){
 			$r->resource('post');
 		});
-		$this->assertMatch('/admin/post', 'GET', 'AdminPost', 'list');
+		$this->assertMatch('/admin/post', 'GET', 'AdminPost', 'index');
 	}
 
 	public function test_scope_resource(){
 		$this->router->scope('foo', [], function($r){
 			$r->resource('article');
 		});
-		$this->assertMatch('/foo/article', 'GET', 'Article', 'list');
+		$this->assertMatch('/foo/article', 'GET', 'Article', 'index');
 		$this->assertMatch('/foo/article', 'POST', 'Article', 'create');
 		$this->assertMatch('/foo/article/7', 'GET', 'Article', 'show', ['id' => 7]);
 		$this->assertMatch('/foo/article/7', 'PUT', 'Article', 'update', ['id' => 7]);
@@ -121,7 +121,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 
 	public function test_resource(){
 		$this->router->resource('article');
-		$this->assertMatch('/article', 'GET', 'Article', 'list');
+		$this->assertMatch('/article', 'GET', 'Article', 'index');
 		$this->assertMatch('/article', 'POST', 'Article', 'create');
 		$this->assertMatch('/article/7', 'GET', 'Article', 'show', ['id' => 7]);
 		$this->assertMatch('/article/7', 'PUT', 'Article', 'update', ['id' => 7]);
@@ -130,8 +130,8 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_resource_only_string(){
-		$this->router->resource('article', ['only' => 'list']);
-		$this->assertMatch('/article', 'GET', 'Article', 'list');
+		$this->router->resource('article', ['only' => 'index']);
+		$this->assertMatch('/article', 'GET', 'Article', 'index');
 		$this->assertNotMatch('/article', 'POST');
 		$this->assertNotMatch('/article/7', 'GET');
 		$this->assertNotMatch('/article/7', 'PUT');
@@ -140,8 +140,8 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_resource_only_array(){
-		$this->router->resource('article', ['only' => ['list', 'destroy']]);
-		$this->assertMatch('/article', 'GET', 'Article', 'list');
+		$this->router->resource('article', ['only' => ['index', 'destroy']]);
+		$this->assertMatch('/article', 'GET', 'Article', 'index');
 		$this->assertNotMatch('/article', 'POST');
 		$this->assertNotMatch('/article/7', 'GET');
 		$this->assertNotMatch('/article/7', 'PUT');
@@ -150,7 +150,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_resource_except_string(){
-		$this->router->resource('article', ['except' => 'list']);
+		$this->router->resource('article', ['except' => 'index']);
 		$this->assertNotMatch('/article', 'GET');
 		$this->assertMatch('/article', 'POST', 'Article', 'create');
 		$this->assertMatch('/article/7', 'GET', 'Article', 'show', ['id' => 7]);
@@ -160,7 +160,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_resource_except_array(){
-		$this->router->resource('article', ['except' => ['list', 'destroy']]);
+		$this->router->resource('article', ['except' => ['index', 'destroy']]);
 		$this->assertNotMatch('/article', 'GET');
 		$this->assertMatch('/article', 'POST', 'Article', 'create');
 		$this->assertMatch('/article/7', 'GET', 'Article', 'show', ['id' => 7]);
