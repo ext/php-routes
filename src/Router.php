@@ -81,7 +81,7 @@ class Router {
 		}
 	}
 
-	protected function default_action($pattern){
+	protected function defaultAction($pattern){
 		return '#' . preg_replace_callback('#/(:[a-z]+)?#', function($x){ return isset($x[1]) ? '' : '_'; }, $pattern);
 	}
 
@@ -128,7 +128,7 @@ class Router {
 		$pattern = trim($pattern, '/');
 
 		/* generate action name */
-		$action = $this->default_action($pattern);
+		$action = $this->defaultAction($pattern);
 		$options = array_merge(['to' => $action], $options);
 		if ( strstr($options['to'], '#') === false ){
 			$options['to'] .= $action;
