@@ -218,7 +218,7 @@ class Router {
 		return $callable;
 	}
 
-	protected static function resource_to($method, $options){
+	protected static function resourceTo($method, $options){
 		$prefix = $options['to'];
 		switch ( $method ){
 			case 'list':
@@ -265,7 +265,7 @@ class Router {
 		}
 
 		foreach ( $methods as $m ){
-			$o = array_merge($options, ['to' => static::resource_to($m, $options)]);
+			$o = array_merge($options, ['to' => static::resourceTo($m, $options)]);
 			switch ( $m ){
 				case 'list':   $this->method("/$pattern",           'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
 				case 'create':  $this->method("/$pattern",          'POST',   array_merge($o, ['as' => "create_{$as_stem}"])); break;
