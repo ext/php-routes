@@ -16,7 +16,7 @@ class RouteFormatter {
 		];
 	}
 
-	protected function column_widths(){
+	protected function columnWidths(){
 		$columns = count($this->lines[0]);
 		$width = [];
 		for ( $i = 0; $i < $columns; $i++ ){
@@ -42,7 +42,7 @@ class RouteFormatter {
 		]);
 
 		$columns = count($this->lines[0]);
-		$width = $this->column_widths();
+		$width = $this->columnWidths();
 		$output = '';
 
 		foreach ( $this->lines as $line ){
