@@ -196,7 +196,7 @@ class Router {
 	/**
 	 * Convert a (resource) pattern to suitable path base.
 	 */
-	private static function path_function_base($pattern){
+	private static function pathFunctionBase($pattern){
 		return str_replace([':', '/'], ['', '_'], $pattern);
 	}
 
@@ -261,7 +261,7 @@ class Router {
 
 		$as_stem = $options['as'];
 		if ( $as_stem === false ){
-			$as_stem = static::path_function_base($pattern);
+			$as_stem = static::pathFunctionBase($pattern);
 		}
 
 		foreach ( $methods as $m ){
