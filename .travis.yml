@@ -6,5 +6,6 @@ install:
   - composer install
 script:
   - tests/phpunit --coverage-clover clover.xml
+  - vendor/bin/phpcs
 after_success:
   - travis_retry php vendor/bin/coveralls
