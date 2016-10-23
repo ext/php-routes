@@ -17,7 +17,7 @@ class Router {
 		include $filename;
 	}
 
-	public function format_routes(){
+	public function formatRoutes(){
 		$formatter = new RouteFormatter();
 		foreach ( $this->patterns as $cur ) {
 			$formatter->add($cur);
@@ -26,7 +26,7 @@ class Router {
 	}
 
 	public function print_routes(){
-		echo $this->format_routes();
+		echo $this->formatRoutes();
 	}
 
 	public function match($url, $method=false){
