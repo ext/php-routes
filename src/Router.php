@@ -3,8 +3,8 @@
 namespace Sidvind\PHPRoutes;
 
 class Router {
-	protected $patterns = array();
-	private $path_methods = array();
+	protected $patterns = [];
+	private $path_methods = [];
 
 	public function __construct($filename=false){
 		if ( !$filename ) return;
@@ -101,7 +101,7 @@ class Router {
 	 * Mostly useful for tests.
 	 */
 	public function clear(){
-		$this->patterns = array();
+		$this->patterns = [];
 	}
 
 	/**
@@ -153,7 +153,7 @@ class Router {
 		$re .= '(?P<format>\.\w+)?';
 
 		list($controller, $action) = $this->parseTo($options['to']);
-		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as));
+		$this->patterns[] = ["/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as)];
 
 		return $this->addPathFunction($pattern, $as);
 	}
@@ -171,7 +171,7 @@ class Router {
 		return '/';
 	}
 
-	public function generatePath($pattern, $obj=array()){
+	public function generatePath($pattern, $obj=[]){
 		if ( !(is_array($obj) || is_object($obj)) ){
 			$args = func_get_args();
 			$args = array_splice($args, 1);
@@ -205,7 +205,7 @@ class Router {
 
 		if ( !is_array($as) ){
 			$func = function() use ($pattern) {
-				return call_user_func_array(array($this, 'generatePath'), array_merge([$pattern], func_get_args()));
+				return call_user_func_array([$this, 'generatePath'], array_merge([$pattern], func_get_args()));
 			};
 		} else {
 			$func = $as[1];
@@ -234,7 +234,7 @@ class Router {
 		return new RootContext($this);
 	}
 
-	public function resource($pattern, array $options=array(), $callback=false){
+	public function resource($pattern, array $options=[], $callback=false){
 		$pattern = trim($pattern, '/');
 		$options = array_merge([
 			'to' => Utils::classname($pattern),
@@ -255,7 +255,7 @@ class Router {
 			if ( func_num_args() == 0 ){
 				return $this->generatePath($pattern);
 			} else {
-				return call_user_func_array(array($this, 'generatePath'), array_merge(["$pattern/:id"], func_get_args()));
+				return call_user_func_array([$this, 'generatePath'], array_merge(["$pattern/:id"], func_get_args()));
 			}
 		};
 
