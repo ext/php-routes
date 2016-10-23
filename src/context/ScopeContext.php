@@ -15,4 +15,4 @@ class ScopeContext extends LeafContext {
 	public function scope($pattern, array $options=[], $callback=false){
 		$this->router->scope("{$this->namespace}/$pattern", array_merge($this->options, $options), $callback);
 	}
-};
+}

@@ -9,4 +9,4 @@ class RouterPattern {
 	public $method;
 	public $controller;
 	public $action;
-};
+}

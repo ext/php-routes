@@ -10,7 +10,7 @@ class IndexController {
 	public function about(){
 		echo "about\n";
 	}
-};
+}
 
 class PostController {
 	public function show($id){

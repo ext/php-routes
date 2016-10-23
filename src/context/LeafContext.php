@@ -50,4 +50,4 @@ class LeafContext {
 		}
 		return $options;
 	}
-};
+}

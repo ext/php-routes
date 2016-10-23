@@ -36,4 +36,4 @@ class RootContext {
 	public function scope($pattern, array $options, $callback){
 		$this->router->scope($pattern, $options, $callback);
 	}
-};
+}
