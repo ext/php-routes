@@ -167,7 +167,7 @@ class Router {
 		}
 	}
 
-	public static function base_path(){
+	public static function basePath(){
 		return '/';
 	}
 
@@ -184,7 +184,7 @@ class Router {
 			$obj = (object)$obj;
 		}
 
-		return static::base_path() . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
+		return static::basePath() . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
 			$name = $match[1];
 			if ( !isset($obj->$name) ){
 				throw new \BadFunctionCallException("Missing argument {$name}");
