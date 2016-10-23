@@ -153,12 +153,12 @@ class Router {
 		$re .= '(?P<format>\.\w+)?';
 
 		list($controller, $action) = $this->parseTo($options['to']);
-		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::path_function_name($as));
+		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as));
 
 		return $this->add_path_function($pattern, $as);
 	}
 
-	private static function path_function_name($as){
+	private static function pathFunctionName($as){
 		if ( $as === false ) return false;
 		if ( !is_array($as) ){
 			return "${as}_path";
@@ -211,7 +211,7 @@ class Router {
 			$func = $as[1];
 		}
 
-		$func_name = static::path_function_name($as);
+		$func_name = static::pathFunctionName($as);
 		$callable = \Closure::bind($func, $this, get_class($this));
 		$this->path_methods[$func_name] = $callable;
 
