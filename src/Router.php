@@ -171,7 +171,7 @@ class Router {
 		return '/';
 	}
 
-	public function generate_path($pattern, $obj=array()){
+	public function generatePath($pattern, $obj=array()){
 		if ( !(is_array($obj) || is_object($obj)) ){
 			$args = func_get_args();
 			$args = array_splice($args, 1);
@@ -205,7 +205,7 @@ class Router {
 
 		if ( !is_array($as) ){
 			$func = function() use ($pattern) {
-				return call_user_func_array(array($this, 'generate_path'), array_merge([$pattern], func_get_args()));
+				return call_user_func_array(array($this, 'generatePath'), array_merge([$pattern], func_get_args()));
 			};
 		} else {
 			$func = $as[1];
@@ -253,9 +253,9 @@ class Router {
 
 		$as_func = function() use ($pattern) {
 			if ( func_num_args() == 0 ){
-				return $this->generate_path($pattern);
+				return $this->generatePath($pattern);
 			} else {
-				return call_user_func_array(array($this, 'generate_path'), array_merge(["$pattern/:id"], func_get_args()));
+				return call_user_func_array(array($this, 'generatePath'), array_merge(["$pattern/:id"], func_get_args()));
 			}
 		};
 
