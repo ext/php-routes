@@ -37,14 +37,14 @@ class LeafContext {
 		$pattern = ltrim($pattern, '/');
 		$default_to = $this->options['to'] . '#' . Utils::actionname($pattern);
 		$options = array_merge($this->options, ['to' => $default_to], $options);
-		$options = $this->fill_to($options);
+		$options = $this->fillTo($options);
 		$this->router->method("{$this->namespace}/{$pattern}", $method, $options);
 	}
 
 	/**
 	 * If 'to' is '#foo' it fills the controller from context.
 	 */
-	protected function fill_to($options){
+	protected function fillTo($options){
 		if ( $options['to'][0] == '#' ){
 			$options['to'] = $this->options['to'] . $options['to'];
 		}
