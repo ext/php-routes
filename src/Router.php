@@ -155,7 +155,7 @@ class Router {
 		list($controller, $action) = $this->parseTo($options['to']);
 		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as));
 
-		return $this->add_path_function($pattern, $as);
+		return $this->addPathFunction($pattern, $as);
 	}
 
 	private static function pathFunctionName($as){
@@ -200,7 +200,7 @@ class Router {
 		return str_replace([':', '/'], ['', '_'], $pattern);
 	}
 
-	private function add_path_function($pattern, $as){
+	private function addPathFunction($pattern, $as){
 		if ( !$as ) return;
 
 		if ( !is_array($as) ){
