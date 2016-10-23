@@ -248,7 +248,7 @@ class Router {
 			$methods = Utils::filterOnly($methods, $options['only']);
 		}
 		if ( isset($options['except']) ){
-			$methods = Utils::filter_except($methods, $options['except']);
+			$methods = Utils::filterExcept($methods, $options['except']);
 		}
 
 		$as_func = function() use ($pattern) {

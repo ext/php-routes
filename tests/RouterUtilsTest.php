@@ -16,12 +16,12 @@ class RouterUtilsTest extends \PHPUnit_Framework_TestCase {
 	}
 
 	public function test_filter_except_string(){
-		$result = \Sidvind\PHPRoutes\Utils::filter_except(static::$src, 'b');
+		$result = \Sidvind\PHPRoutes\Utils::filterExcept(static::$src, 'b');
 		$this->assertEquals(['a', 'c', 'd'], array_values($result));
 	}
 
 	public function test_filter_except_array(){
-		$result = \Sidvind\PHPRoutes\Utils::filter_except(static::$src, ['a', 'c']);
+		$result = \Sidvind\PHPRoutes\Utils::filterExcept(static::$src, ['a', 'c']);
 		$this->assertEquals(['b', 'd'], array_values($result));
 	}
 }

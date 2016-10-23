@@ -28,7 +28,7 @@ class Utils {
 	 *
 	 * @param $except string|array blacklisted values
 	 */
-	public static function filter_except(array $methods, $except){
+	public static function filterExcept(array $methods, $except){
 		$except = is_array($except) ? $except : [$except];
 		return array_filter($methods, function($x) use ($except) {
 			return !in_array($x, $except);
