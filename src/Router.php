@@ -69,7 +69,7 @@ class Router {
 		return null;
 	}
 
-	protected function parse_to($str){
+	protected function parseTo($str){
 		if ( !preg_match('/^([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+)?)?$/', $str, $match) ){
 			throw new \BadFunctionCallException("Malformed 'to'");
 		}
@@ -152,7 +152,7 @@ class Router {
 		/* optional format suffix */
 		$re .= '(?P<format>\.\w+)?';
 
-		list($controller, $action) = $this->parse_to($options['to']);
+		list($controller, $action) = $this->parseTo($options['to']);
 		$this->patterns[] = array("/$pattern", "#^/$re$#", $method, $controller, $action, static::path_function_name($as));
 
 		return $this->add_path_function($pattern, $as);
