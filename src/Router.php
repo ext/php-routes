@@ -25,7 +25,7 @@ class Router {
 		return (string)$formatter;
 	}
 
-	public function print_routes(){
+	public function printRoutes(){
 		echo $this->formatRoutes();
 	}
 

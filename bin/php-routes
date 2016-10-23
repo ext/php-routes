@@ -22,7 +22,7 @@ $filename = $argv[1];
 $router = new Sidvind\PHPRoutes\Router($filename);
 
 if ( $argc === 2 ){
-	$router->print_routes();
+	$router->printRoutes();
 } else if ( $argc == 4 ){
 	$method = strtoupper($argv[2]);
 	$url = $argv[3];
