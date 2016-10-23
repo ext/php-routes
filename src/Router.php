@@ -2,297 +2,370 @@
 
 namespace Sidvind\PHPRoutes;
 
-class Router {
-	protected $patterns = [];
-	private $path_methods = [];
+class Router
+{
+    protected $patterns = [];
+    private $path_methods = [];
 
-	public function __construct($filename=false){
-		if ( !$filename ) return;
-		$get       = function($pattern, array $options=[]){ $this->method($pattern, 'GET',    $options); };
-		$post      = function($pattern, array $options=[]){ $this->method($pattern, 'POST',   $options); };
-		$put       = function($pattern, array $options=[]){ $this->method($pattern, 'PUT',    $options); };
-		$delete    = function($pattern, array $options=[]){ $this->method($pattern, 'DELETE', $options); };
-		$resource  = function($pattern, array $options=[], $callback=false){ $this->resource($pattern, $options, $callback); };
-		$scope     = function($pattern, array $options=[], $callback){ $this->scope($pattern, $options, $callback); };
-		include $filename;
-	}
+    public function __construct($filename = false)
+    {
+        if (!$filename) {
+            return;
+        }
 
-	public function formatRoutes(){
-		$formatter = new RouteFormatter();
-		foreach ( $this->patterns as $cur ) {
-			$formatter->add($cur);
-		}
-		return (string)$formatter;
-	}
+        $get = function ($pattern, array $options = []) {
+            $this->method($pattern, 'GET', $options);
+        };
+        $post = function ($pattern, array $options = []) {
+            $this->method($pattern, 'POST', $options);
+        };
+        $put = function ($pattern, array $options = []) {
+            $this->method($pattern, 'PUT', $options);
+        };
+        $delete = function ($pattern, array $options = []) {
+            $this->method($pattern, 'DELETE', $options);
+        };
+        $resource = function ($pattern, array $options = [], $callback = false) {
+            $this->resource($pattern, $options, $callback);
+        };
+        $scope = function ($pattern, array $options = [], $callback) {
+            $this->scope($pattern, $options, $callback);
+        };
 
-	public function printRoutes(){
-		echo $this->formatRoutes();
-	}
+        include $filename;
+    }
 
-	public function match($url, $method=false){
-		$method = $method ?: $_SERVER['REQUEST_METHOD'];
+    public function formatRoutes()
+    {
+        $formatter = new RouteFormatter();
+        foreach ($this->patterns as $cur) {
+            $formatter->add($cur);
+        }
+        return (string)$formatter;
+    }
 
-		/* handle HEAD as GET */
-		if ( $method === 'HEAD' ){
-			$method = 'GET';
-		}
+    public function printRoutes()
+    {
+        echo $this->formatRoutes();
+    }
 
-		foreach ( $this->patterns as $cur ){
-			list(, $re, $cur_method, $controller, $action) = $cur;
-			if ( $cur_method !== $method ) continue;
+    public function match($url, $method = false)
+    {
+        $method = $method ?: $_SERVER['REQUEST_METHOD'];
 
-			if ( preg_match($re, $url, $match) ){
-				foreach ( $match as $k => $v ){
-					if ( is_numeric($k) ) unset($match[$k]);
-				}
+        /* handle HEAD as GET */
+        if ($method === 'HEAD') {
+            $method = 'GET';
+        }
 
-				/* find if format suffix was specified */
-				$format = false;
-				if ( array_key_exists('format', $match) ){
-					$format = substr($match['format'], 1) /* remove dot */;
-					unset($match['format']);
+        foreach ($this->patterns as $cur) {
+            list(, $re, $cur_method, $controller, $action) = $cur;
+            if ($cur_method !== $method) {
+                continue;
+            }
 
-					/* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
-					switch ( $format ){
-						case 'html': $format = 'text/html'; break;
-						case 'json': $format = 'application/json'; break;
-						case 'md': $format = 'text/markdown'; break;
-						case 'txt': $format = 'text/plain'; break;
-						case 'xml': $format = 'application/xml'; break;
-						case 'svg': $format = 'image/svg+xml'; break;
-					}
-				}
+            if (preg_match($re, $url, $match)) {
+                foreach ($match as $k => $v) {
+                    if (is_numeric($k)) {
+                        unset($match[$k]);
+                    }
+                }
 
-				return new RouterMatch($controller, $action, $match, $format);
-			}
-		}
-		return null;
-	}
+                /* find if format suffix was specified */
+                $format = false;
+                if (array_key_exists('format', $match)) {
+                    $format = substr($match['format'], 1) /* remove dot */;
+                    unset($match['format']);
 
-	protected function parseTo($str){
-		if ( !preg_match('/^([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+)?)?$/', $str, $match) ){
-			throw new \BadFunctionCallException("Malformed 'to'");
-		}
-		array_shift($match);
-		switch ( count($match) ){
-			case 0: return ['Index', 'index'];
-			case 1: return [$match[0], 'index'];
-			case 2: return [$match[0] ?: 'Index', $match[1]];
-		}
-	}
+                    /* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
+                    switch ($format) {
+                        case 'html':
+                            $format = 'text/html';
+                            break;
+                        case 'json':
+                            $format = 'application/json';
+                            break;
+                        case 'md':
+                            $format = 'text/markdown';
+                            break;
+                        case 'txt':
+                            $format = 'text/plain';
+                            break;
+                        case 'xml':
+                            $format = 'application/xml';
+                            break;
+                        case 'svg':
+                            $format = 'image/svg+xml';
+                            break;
+                    }
+                }
 
-	protected function defaultAction($pattern){
-		return '#' . preg_replace_callback('#/(:[a-z]+)?#', function($x){ return isset($x[1]) ? '' : '_'; }, $pattern);
-	}
+                return new RouterMatch($controller, $action, $match, $format);
+            }
+        }
+        return null;
+    }
 
-	public function __call($method, $args){
-		if ( isset($this->path_methods[$method]) && is_callable($this->path_methods[$method]) ){
-			return call_user_func_array($this->path_methods[$method], $args);
-		}
+    protected function parseTo($str)
+    {
+        if (!preg_match('/^([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+)?)?$/', $str, $match)) {
+            throw new \BadFunctionCallException("Malformed 'to'");
+        }
+        array_shift($match);
+        switch (count($match)) {
+            case 0:
+                return ['Index', 'index'];
+            case 1:
+                return [$match[0], 'index'];
+            case 2:
+                return [$match[0] ?: 'Index', $match[1]];
+        }
+    }
 
-		$trace = debug_backtrace();
-		$class = get_class($this);
-		trigger_error("Call to undefined method $class::$method from {$trace[0]['file']} on line {$trace[0]['line']}", E_USER_ERROR);
-		return null;
-	}
+    protected function defaultAction($pattern)
+    {
+        return '#' . preg_replace_callback('#/(:[a-z]+)?#', function ($x) {
+            return isset($x[1]) ? '' : '_';
+        }, $pattern);
+    }
 
-	/**
-	 * Removes all routes.
-	 * Mostly useful for tests.
-	 */
-	public function clear(){
-		$this->patterns = [];
-	}
+    public function __call($method, $args)
+    {
+        if (isset($this->path_methods[$method]) && is_callable($this->path_methods[$method])) {
+            return call_user_func_array($this->path_methods[$method], $args);
+        }
 
-	/**
-	 * Add a new route.
-	 *
-	 * Format:
-	 * Basic format is '/path/to/match' which literally matches the url.
-	 * Variables can be assigned using '/foo/:bar' where the second part is a
-	 * variable called bar. By default variables accept almost anything but the
-	 * regular expression can be tuned using the option 'bar_format' (see below).
-	 * Patterns may also contain regular expressions.
-	 *
-	 * @param $pattern Route pattern to match, see format description above.
-	 * @param $method Which HTTP method to match.
-	 * @param $options Array of options:
-	 * @option 'to' Target controller/action. [controller][#action]
-	 * @option 'as' Name of this route.
-	 * @option 'var_format' Variable format. 'var' should be replaced with the
-	 *                      actual variable name, like 'bar_format'. The value
-	 *                      is the RE for matching, e.g. '[0-9]+' for a required
-	 *                      number.
-	 */
-	public function method($pattern, $method, $options){
-		$pattern = trim($pattern, '/');
+        $trace = debug_backtrace();
+        $class = get_class($this);
+        trigger_error("Call to undefined method $class::$method from {$trace[0]['file']} " .
+                      "on line {$trace[0]['line']}", E_USER_ERROR);
+        return null;
+    }
 
-		/* generate action name */
-		$action = $this->defaultAction($pattern);
-		$options = array_merge(['to' => $action], $options);
-		if ( strstr($options['to'], '#') === false ){
-			$options['to'] .= $action;
-		}
+    /**
+     * Removes all routes.
+     * Mostly useful for tests.
+     */
+    public function clear()
+    {
+        $this->patterns = [];
+    }
 
-		/* default options */
-		$options = array_merge([
-			'as' => false,
-		], $options);
-		$as = $options['as'];
+    /**
+     * Add a new route.
+     *
+     * Format:
+     * Basic format is '/path/to/match' which literally matches the url.
+     * Variables can be assigned using '/foo/:bar' where the second part is a
+     * variable called bar. By default variables accept almost anything but the
+     * regular expression can be tuned using the option 'bar_format' (see below).
+     * Patterns may also contain regular expressions.
+     *
+     * @param $pattern Route pattern to match, see format description above.
+     * @param $method Which HTTP method to match.
+     * @param $options Array of options:
+     * @option 'to' Target controller/action. [controller][#action]
+     * @option 'as' Name of this route.
+     * @option 'var_format' Variable format. 'var' should be replaced with the
+     *                      actual variable name, like 'bar_format'. The value
+     *                      is the RE for matching, e.g. '[0-9]+' for a required
+     *                      number.
+     */
+    public function method($pattern, $method, $options)
+    {
+        $pattern = trim($pattern, '/');
 
-		$re = preg_replace_callback('/:([a-z]+)/', function($x) use ($options) {
-			$fmt = '[A-Za-z0-9\-_\.]+'; /* default variable format */
-			if ( isset($options[$x[1] . '_format']) ){
-				$fmt = $options[$x[1] . '_format'];
-			}
-			return "(?P<{$x[1]}>$fmt)";
-		}, $pattern);
-		preg_match_all('/:([a-z]+)/', $pattern, $args);
+        /* generate action name */
+        $action = $this->defaultAction($pattern);
+        $options = array_merge(['to' => $action], $options);
+        if (strstr($options['to'], '#') === false) {
+            $options['to'] .= $action;
+        }
 
-		/* optional format suffix */
-		$re .= '(?P<format>\.\w+)?';
+        /* default options */
+        $options = array_merge([
+            'as' => false,
+        ], $options);
+        $as = $options['as'];
 
-		list($controller, $action) = $this->parseTo($options['to']);
-		$this->patterns[] = ["/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as)];
+        $re = preg_replace_callback('/:([a-z]+)/', function ($x) use ($options) {
+            $fmt = '[A-Za-z0-9\-_\.]+'; /* default variable format */
+            if (isset($options[$x[1] . '_format'])) {
+                $fmt = $options[$x[1] . '_format'];
+            }
+            return "(?P<{$x[1]}>$fmt)";
+        }, $pattern);
+        preg_match_all('/:([a-z]+)/', $pattern, $args);
 
-		return $this->addPathFunction($pattern, $as);
-	}
+        /* optional format suffix */
+        $re .= '(?P<format>\.\w+)?';
 
-	private static function pathFunctionName($as){
-		if ( $as === false ) return false;
-		if ( !is_array($as) ){
-			return "${as}_path";
-		} else {
-			return "${as[0]}_path";
-		}
-	}
+        list($controller, $action) = $this->parseTo($options['to']);
+        $this->patterns[] = ["/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as)];
 
-	public static function basePath(){
-		return '/';
-	}
+        return $this->addPathFunction($pattern, $as);
+    }
 
-	public function generatePath($pattern, $obj=[]){
-		if ( !(is_array($obj) || is_object($obj)) ){
-			$args = func_get_args();
-			$args = array_splice($args, 1);
-			return '/' . preg_replace_callback('/:([a-z]+)/', function($match) use (&$args) {
-			return array_shift($args);
-			}, $pattern);
-		}
+    private static function pathFunctionName($as)
+    {
+        if ($as === false) {
+            return false;
+        }
+        if (!is_array($as)) {
+            return "${as}_path";
+        } else {
+            return "${as[0]}_path";
+        }
+    }
 
-		if ( is_array($obj) ){
-			$obj = (object)$obj;
-		}
+    public static function basePath()
+    {
+        return '/';
+    }
 
-		return static::basePath() . preg_replace_callback('/:([a-z]+)/', function($match) use ($obj) {
-			$name = $match[1];
-			if ( !isset($obj->$name) ){
-				throw new \BadFunctionCallException("Missing argument {$name}");
-			}
-			return $obj->$name;
-		}, $pattern);
-	}
+    public function generatePath($pattern, $obj = [])
+    {
+        if (!(is_array($obj) || is_object($obj))) {
+            $args = func_get_args();
+            $args = array_splice($args, 1);
+            return '/' . preg_replace_callback('/:([a-z]+)/', function ($match) use (&$args) {
+                return array_shift($args);
+            }, $pattern);
+        }
 
-	/**
-	 * Convert a (resource) pattern to suitable path base.
-	 */
-	private static function pathFunctionBase($pattern){
-		return str_replace([':', '/'], ['', '_'], $pattern);
-	}
+        if (is_array($obj)) {
+            $obj = (object)$obj;
+        }
 
-	private function addPathFunction($pattern, $as){
-		if ( !$as ) return;
+        return static::basePath() . preg_replace_callback('/:([a-z]+)/', function ($match) use ($obj) {
+            $name = $match[1];
+            if (!isset($obj->$name)) {
+                throw new \BadFunctionCallException("Missing argument {$name}");
+            }
+            return $obj->$name;
+        }, $pattern);
+    }
 
-		if ( !is_array($as) ){
-			$func = function() use ($pattern) {
-				return call_user_func_array([$this, 'generatePath'], array_merge([$pattern], func_get_args()));
-			};
-		} else {
-			$func = $as[1];
-		}
+    /**
+     * Convert a (resource) pattern to suitable path base.
+     */
+    private static function pathFunctionBase($pattern)
+    {
+        return str_replace([':', '/'], ['', '_'], $pattern);
+    }
 
-		$func_name = static::pathFunctionName($as);
-		$callable = \Closure::bind($func, $this, get_class($this));
-		$this->path_methods[$func_name] = $callable;
+    private function addPathFunction($pattern, $as)
+    {
+        if (!$as) {
+            return;
+        }
 
-		return $callable;
-	}
+        if (!is_array($as)) {
+            $func = function () use ($pattern) {
+                return call_user_func_array([$this, 'generatePath'], array_merge([$pattern], func_get_args()));
+            };
+        } else {
+            $func = $as[1];
+        }
 
-	protected static function resourceTo($method, $options){
-		$prefix = $options['to'];
-		switch ( $method ){
-			case 'list':
-				return "{$prefix}#index";
-			case 'new':
-				return "{$prefix}#make";
-			default:
-				return "{$prefix}#{$method}";
-		}
-	}
+        $func_name = static::pathFunctionName($as);
+        $callable = \Closure::bind($func, $this, get_class($this));
+        $this->path_methods[$func_name] = $callable;
 
-	public function context(){
-		return new RootContext($this);
-	}
+        return $callable;
+    }
 
-	public function resource($pattern, array $options=[], $callback=false){
-		$pattern = trim($pattern, '/');
-		$options = array_merge([
-			'to' => Utils::classname($pattern),
-			'as' => false,
-			'id_format' => '\d+',
-		], $options);
-		$context = new ResourceContext($pattern, $options, $this);
+    protected static function resourceTo($method, $options)
+    {
+        $prefix = $options['to'];
+        switch ($method) {
+            case 'list':
+                return "{$prefix}#index";
+            case 'new':
+                return "{$prefix}#make";
+            default:
+                return "{$prefix}#{$method}";
+        }
+    }
 
-		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
-		if ( isset($options['only']) ){
-			$methods = Utils::filterOnly($methods, $options['only']);
-		}
-		if ( isset($options['except']) ){
-			$methods = Utils::filterExcept($methods, $options['except']);
-		}
+    public function context()
+    {
+        return new RootContext($this);
+    }
 
-		$as_func = function() use ($pattern) {
-			if ( func_num_args() == 0 ){
-				return $this->generatePath($pattern);
-			} else {
-				return call_user_func_array([$this, 'generatePath'], array_merge(["$pattern/:id"], func_get_args()));
-			}
-		};
+    public function resource($pattern, array $options = [], $callback = false)
+    {
+        $pattern = trim($pattern, '/');
+        $options = array_merge([
+            'to' => Utils::classname($pattern),
+            'as' => false,
+            'id_format' => '\d+',
+        ], $options);
+        $context = new ResourceContext($pattern, $options, $this);
 
-		$as_stem = $options['as'];
-		if ( $as_stem === false ){
-			$as_stem = static::pathFunctionBase($pattern);
-		}
+        $methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
+        if (isset($options['only'])) {
+            $methods = Utils::filterOnly($methods, $options['only']);
+        }
+        if (isset($options['except'])) {
+            $methods = Utils::filterExcept($methods, $options['except']);
+        }
 
-		foreach ( $methods as $m ){
-			$o = array_merge($options, ['to' => static::resourceTo($m, $options)]);
-			switch ( $m ){
-				case 'list':   $this->method("/$pattern",           'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
-				case 'create':  $this->method("/$pattern",          'POST',   array_merge($o, ['as' => "create_{$as_stem}"])); break;
-				case 'new':     $this->method("/$pattern/new",      'GET',    array_merge($o, ['as' => "new_{$as_stem}"])); break;
-				case 'edit':    $this->method("/$pattern/:id/edit", 'GET',    array_merge($o, ['as' => "edit_{$as_stem}"])); break;
-				case 'show':    $this->method("/$pattern/:id",      'GET',    array_merge($o, ['as' => [$as_stem, $as_func]])); break;
-				case 'destroy': $this->method("/$pattern/:id",      'DELETE', array_merge($o, ['as' => "destroy_{$as_stem}"])); break;
-				case 'update':
-					$this->method("/$pattern/:id", 'PUT',    array_merge($o, ['as' => "update_{$as_stem}"]));
-					$this->method("/$pattern/:id", 'PATCH',  $o);
-					break;
-			}
-		}
-		if ( $callback ){
-			$callback($context);
-		}
-	}
+        $as_func = function () use ($pattern) {
+            if (func_num_args() == 0) {
+                return $this->generatePath($pattern);
+            } else {
+                return call_user_func_array([$this, 'generatePath'], array_merge(["$pattern/:id"], func_get_args()));
+            }
+        };
 
-	public function scope($pattern, array $options, $callback){
-		$pattern = trim($pattern, '/');
-		$defaults = [
-			'to' => false,
-		];
-		$context = new ScopeContext($pattern, array_merge($defaults, $options), $this);
+        $as_stem = $options['as'];
+        if ($as_stem === false) {
+            $as_stem = static::pathFunctionBase($pattern);
+        }
 
-		if ( $callback ){
-			$callback($context);
-		}
-	}
+        foreach ($methods as $m) {
+            $o = array_merge($options, ['to' => static::resourceTo($m, $options)]);
+            switch ($m) {
+                case 'list':
+                    $this->method("/$pattern", 'GET', array_merge($o, ['as' => [$as_stem, $as_func]]));
+                    break;
+                case 'create':
+                    $this->method("/$pattern", 'POST', array_merge($o, ['as' => "create_{$as_stem}"]));
+                    break;
+                case 'new':
+                    $this->method("/$pattern/new", 'GET', array_merge($o, ['as' => "new_{$as_stem}"]));
+                    break;
+                case 'edit':
+                    $this->method("/$pattern/:id/edit", 'GET', array_merge($o, ['as' => "edit_{$as_stem}"]));
+                    break;
+                case 'show':
+                    $this->method("/$pattern/:id", 'GET', array_merge($o, ['as' => [$as_stem, $as_func]]));
+                    break;
+                case 'destroy':
+                    $this->method("/$pattern/:id", 'DELETE', array_merge($o, ['as' => "destroy_{$as_stem}"]));
+                    break;
+                case 'update':
+                    $this->method("/$pattern/:id", 'PUT', array_merge($o, ['as' => "update_{$as_stem}"]));
+                    $this->method("/$pattern/:id", 'PATCH', $o);
+                    break;
+            }
+        }
+        if ($callback) {
+            $callback($context);
+        }
+    }
+
+    public function scope($pattern, array $options, $callback)
+    {
+        $pattern = trim($pattern, '/');
+        $defaults = [
+            'to' => false,
+        ];
+        $context = new ScopeContext($pattern, array_merge($defaults, $options), $this);
+
+        if ($callback) {
+            $callback($context);
+        }
+    }
 }

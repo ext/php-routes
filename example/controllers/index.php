@@ -2,12 +2,15 @@
 
 namespace ExampleApplication;
 
-class IndexController {
-	public function index(){
-		echo "index\n";
-	}
+class IndexController
+{
+    public function index()
+    {
+        echo "index\n";
+    }
 
-	public function about(){
-		echo "about\n";
-	}
+    public function about()
+    {
+        echo "about\n";
+    }
 }
