@@ -245,7 +245,7 @@ class Router {
 
 		$methods = ['list', 'create', 'new', 'update', 'show', 'edit', 'destroy'];
 		if ( isset($options['only']) ){
-			$methods = Utils::filter_only($methods, $options['only']);
+			$methods = Utils::filterOnly($methods, $options['only']);
 		}
 		if ( isset($options['except']) ){
 			$methods = Utils::filter_except($methods, $options['except']);

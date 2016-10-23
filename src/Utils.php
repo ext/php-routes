@@ -16,7 +16,7 @@ class Utils {
 	 *
 	 * @param $only string|array whitelisted values
 	 */
-	public static function filter_only(array $methods, $only){
+	public static function filterOnly(array $methods, $only){
 		$only = is_array($only) ? $only : [$only];
 		return array_filter($methods, function($x) use ($only) {
 			return in_array($x, $only);

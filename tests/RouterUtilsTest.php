@@ -6,12 +6,12 @@ class RouterUtilsTest extends \PHPUnit_Framework_TestCase {
 	public static $src = ['a', 'b', 'c', 'd'];
 
 	public function test_filter_only_string(){
-		$result = \Sidvind\PHPRoutes\Utils::filter_only(static::$src, 'a');
+		$result = \Sidvind\PHPRoutes\Utils::filterOnly(static::$src, 'a');
 		$this->assertEquals(['a'], array_values($result));
 	}
 
 	public function test_filter_only_array(){
-		$result = \Sidvind\PHPRoutes\Utils::filter_only(static::$src, ['a', 'c']);
+		$result = \Sidvind\PHPRoutes\Utils::filterOnly(static::$src, ['a', 'c']);
 		$this->assertEquals(['a', 'c'], array_values($result));
 	}
 
