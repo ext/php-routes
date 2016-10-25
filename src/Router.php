@@ -106,7 +106,7 @@ class Router
         return null;
     }
 
-    protected function parseTo($str, $defaultAction='index')
+    protected function parseTo($str, $defaultAction = 'index')
     {
         if (!preg_match('/^([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+)?)?$/', $str, $match)) {
             throw new \BadFunctionCallException("Malformed 'to'");
@@ -124,7 +124,7 @@ class Router
 
     protected function defaultAction($pattern)
     {
-        if ( empty($pattern) ){
+        if (empty($pattern)) {
             return 'index';
         }
         return preg_replace_callback('#/(:[a-z]+)?#', function ($x) {
