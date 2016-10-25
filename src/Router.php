@@ -139,7 +139,6 @@ class Router
         $class = get_class($this);
         trigger_error("Call to undefined method $class::$method from {$trace[0]['file']} " .
                       "on line {$trace[0]['line']}", E_USER_ERROR);
-        return null;
     }
 
     /**
