@@ -1,3 +1,10 @@
+## 1.2.7 (2016-10-25)
+
+### Fixes
+
+- Additional unittests
+- Internal changes to `parseTo`
+
 ## 1.2.6 (2016-10-23)
 
 ### Breaking changes
