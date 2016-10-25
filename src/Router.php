@@ -287,6 +287,9 @@ class Router
         }
     }
 
+    /**
+     * Create a new context for adding routes directly to root scope.
+     */
     public function context()
     {
         return new RootContext($this);

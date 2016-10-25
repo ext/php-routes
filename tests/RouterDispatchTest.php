@@ -208,6 +208,20 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertMatch('/article/1/put', 'PUT', 'Article', 'put', ['id' => 1]);
 	}
 
+    public function test_context(){
+        $root = $this->router->context();
+        $root->delete('/delete');
+        $root->get('/get');
+        $root->patch('/patch');
+        $root->post('/post');
+        $root->put('/put');
+        $this->assertMatch('/delete', 'DELETE', 'Index', 'delete');
+        $this->assertMatch('/get', 'GET', 'Index', 'get');
+        $this->assertMatch('/patch', 'PATCH', 'Index', 'patch');
+        $this->assertMatch('/post', 'POST', 'Index', 'post');
+        $this->assertMatch('/put', 'PUT', 'Index', 'put');
+    }
+
 	protected function assertMatch($url, $method, $controller, $action, array $args=[]){
 		$match = $this->router->match($url, $method);
 		$this->assertTrue((boolean)$match, "URL {$url} should match a route");
