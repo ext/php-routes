@@ -76,4 +76,30 @@ class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->expectException(\PHPUnit_Framework_Error::class);
 		$this->router->foo_path();
 	}
+
+    public function test_resource_call_no_args(){
+        $this->router->resource('/article');
+        $this->assertEquals('/article', $this->router->article_path());
+        $this->assertEquals('/article', $this->router->create_article_path());
+        $this->expectException(\BadFunctionCallException::class);
+        $this->assertEquals('/article', $this->router->update_article_path());
+    }
+
+    public function test_resource_call_positional_args(){
+        $this->router->resource('/article');
+        $this->assertEquals('/article/1', $this->router->article_path(1));
+        $this->assertEquals('/article/1', $this->router->update_article_path(1));
+    }
+
+    public function test_resource_call_named_args(){
+        $this->router->resource('/article');
+        $this->assertEquals('/article/1', $this->router->article_path(['id' => 1]));
+        $this->assertEquals('/article/1', $this->router->update_article_path(['id' => 1]));
+    }
+
+    public function test_resource_call_object_args(){
+        $this->router->resource('/article');
+        $this->assertEquals('/article/1', $this->router->article_path((object)['id' => 1]));
+        $this->assertEquals('/article/1', $this->router->update_article_path((object)['id' => 1]));
+    }
 }
