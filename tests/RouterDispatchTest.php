@@ -25,6 +25,11 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase {
 		$this->assertMatch('/foo', 'PATCH', 'Test', 'action');
 	}
 
+    public function test_method_only_controller(){
+		$this->router->method('foo', 'GET', ['to' => 'Test']);
+		$this->assertMatch('/foo', 'GET', 'Test', 'foo');
+	}
+
 	public function test_head(){
 		$this->router->method('foo', 'GET', ['to' => 'Test#action']);
 		$this->assertMatch('/foo', 'GET', 'Test', 'action');

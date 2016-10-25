@@ -106,7 +106,7 @@ class Router
         return null;
     }
 
-    protected function parseTo($str)
+    protected function parseTo($str, $defaultAction='index')
     {
         if (!preg_match('/^([A-Z][a-zA-Z0-9]*)?(?:#([a-zA-Z0-9_]+)?)?$/', $str, $match)) {
             throw new \BadFunctionCallException("Malformed 'to'");
@@ -114,9 +114,9 @@ class Router
         array_shift($match);
         switch (count($match)) {
             case 0:
-                return ['Index', 'index'];
+                return ['Index', $defaultAction];
             case 1:
-                return [$match[0], 'index'];
+                return [$match[0], $defaultAction];
             case 2:
                 return [$match[0] ?: 'Index', $match[1]];
         }
@@ -124,7 +124,10 @@ class Router
 
     protected function defaultAction($pattern)
     {
-        return '#' . preg_replace_callback('#/(:[a-z]+)?#', function ($x) {
+        if ( empty($pattern) ){
+            return 'index';
+        }
+        return preg_replace_callback('#/(:[a-z]+)?#', function ($x) {
             return isset($x[1]) ? '' : '_';
         }, $pattern);
     }
@@ -175,14 +178,11 @@ class Router
         $pattern = trim($pattern, '/');
 
         /* generate action name */
-        $action = $this->defaultAction($pattern);
-        $options = array_merge(['to' => $action], $options);
-        if (strstr($options['to'], '#') === false) {
-            $options['to'] .= $action;
-        }
+        $defaultAction = $this->defaultAction($pattern);
 
         /* default options */
         $options = array_merge([
+            'to' => '#' . $defaultAction,
             'as' => false,
         ], $options);
         $as = $options['as'];
@@ -199,7 +199,7 @@ class Router
         /* optional format suffix */
         $re .= '(?P<format>\.\w+)?';
 
-        list($controller, $action) = $this->parseTo($options['to']);
+        list($controller, $action) = $this->parseTo($options['to'], $defaultAction);
         $this->patterns[] = ["/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as)];
 
         return $this->addPathFunction($pattern, $as);

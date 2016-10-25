@@ -2,8 +2,13 @@
 
 class Router extends Sidvind\PHPRoutes\Router {
 	/* expose */
-	public function parseTo($str){
-		return parent::parseTo($str);
+	public function parseTo($str, $defaultAction=null){
+        /* keep default from parent call */
+        if ( $defaultAction === null ){
+		    return parent::parseTo($str);
+        } else {
+            return parent::parseTo($str, $defaultAction);
+        }
 	}
 }
 
@@ -24,6 +29,10 @@ class RouterToTest extends PHPUnit_Framework_TestCase {
 
 	public function test_only_controller(){
 		$this->assertEquals(['Foo', 'index'], $this->router->parseTo('Foo'));
+	}
+
+    public function test_only_controller_with_action(){
+		$this->assertEquals(['Foo', 'bar'], $this->router->parseTo('Foo', 'bar'));
 	}
 
 	public function test_only_action(){
