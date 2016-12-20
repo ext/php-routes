@@ -5,17 +5,20 @@ namespace Sidvind\PHPRoutes;
 class RouteFormatter
 {
     protected $lines = [];
+    public $verbose = false;
 
     public function add($route)
     {
-        list($pattern, $re, $method, $controller, $action, $as) = $route;
-        $this->lines[] = [
-            preg_replace('/_path$/', '', $as),
-            $method,
-            $pattern,
-            "{$controller}#{$action}",
-            $re
+        $line = [
+            preg_replace('/_path$/', '', $route->name),
+            $route->method,
+            $route->pattern,
+            "{$route->controller}#{$route->action}",
         ];
+        if ($this->verbose) {
+            $line[] = preg_replace('/\?P<[a-z]+>/', '', $route->regex);
+        }
+        $this->lines[] = $line;
     }
 
     protected function columnWidths()
@@ -37,13 +40,16 @@ class RouteFormatter
         }
 
         /* header */
-        array_unshift($this->lines, [
+        $headings = [
             'NAME',
             'METHOD',
             'PATTERN',
             'TO',
-            'REGEXP',
-        ]);
+        ];
+        if ($this->verbose) {
+            $headings[] = 'REGEXP';
+        }
+        array_unshift($this->lines, $headings);
 
         $columns = count($this->lines[0]);
         $width = $this->columnWidths();
@@ -51,8 +57,12 @@ class RouteFormatter
 
         foreach ($this->lines as $line) {
             for ($i = 0; $i < $columns; $i++) {
-                $w = $width[$i] + 4;
-                $output .= sprintf("%-{$w}s", $line[$i]);
+                if ($i+1 !== $columns) {
+                    $w = $width[$i] + 4;
+                    $output .= sprintf("%-{$w}s", $line[$i]);
+                } else {
+                    $output .= $line[$i];
+                }
             }
             $output .= "\n";
         }

@@ -1,3 +1,19 @@
+## 1.2.8
+
+## Features
+
+- `php-routes` binary learned `-v` for verbose output (non-verbose
+  mode now hides regex output.)
+- `php-routes` binary no longer writes trailing whitespace.
+- `php-routes` binary output simplified regex (unnecessary details
+  hidden from user.)
+
+### Changes
+
+- Routes are now stored in `Route` state class instead of positional
+  array.
+- Minor refactoring
+
 ## 1.2.7 (2016-10-25)
 
 ### Fixes

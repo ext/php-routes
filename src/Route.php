@@ -2,11 +2,11 @@
 
 namespace Sidvind\PHPRoutes;
 
-class RouterPattern
+class Route
 {
     public $pattern;
-    public $re;
-    public $as;
+    public $regex;
+    public $name;
     public $method;
     public $controller;
     public $action;

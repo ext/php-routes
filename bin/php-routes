@@ -1,42 +1,49 @@
 #!/usr/bin/env php
 <?php
 
-function usage(){
-	global $argv;
-	echo "usage: {$argv[0]} FILENAME METHOD URL\n";
-	exit;
-}
+$usage = "usage: {$argv[0]} [-v] FILENAME METHOD URL\n";
 
 /* hack to find composer autoloader, kind of stolen from phpunit  */
-foreach (array(__DIR__ . '/../../../autoload.php', __DIR__ . '/../../vendor/autoload.php', __DIR__ . '/../vendor/autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
-	if (file_exists($file)) {
-		require $file;
-	}
+$autoloader = [
+    __DIR__ . '/../../../autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
+    __DIR__ . '/../vendor/autoload.php',
+    __DIR__ . '/vendor/autoload.php',
+];
+foreach ($autoloader as $file) {
+    if (file_exists($file)) {
+        require $file;
+    }
 }
 
-if ( $argc === 1 ){
-	usage();
+if ($argc === 1) {
+    echo $usage;
+    exit;
 }
 
-$filename = $argv[1];
+$options = getopt('v', []);
+$pos = array_slice($argv, count($options) + 1);
+$verbose = isset($options['v']);
+$filename = array_shift($pos);
 $router = new Sidvind\PHPRoutes\Router($filename);
 
-if ( $argc === 2 ){
-	$router->printRoutes();
-} else if ( $argc == 4 ){
-	$method = strtoupper($argv[2]);
-	$url = $argv[3];
-	$match = $router->match($url, $method);
-	if ( $match ){
-		echo "Controller: {$match->controller}\n";
-		echo "Action: {$match->action}\n";
-		echo "Format: {$match->format}\n";
-		echo "Arguments:\n";
-		echo json_encode($match->args, JSON_PRETTY_PRINT);
-	} else {
-		echo "{$argv[0]}: url doesn't match any route.\n";
-		exit(1);
-	}
+if (count($pos) === 0) {
+    $router->printRoutes($verbose);
+} elseif (count($pos) == 2) {
+    $method = strtoupper($pos[0]);
+    $url = $pos[1];
+    $match = $router->match($url, $method);
+    if ($match) {
+        echo "Controller: {$match->controller}\n";
+        echo "Action: {$match->action}\n";
+        echo "Format: {$match->format}\n";
+        echo "Arguments:\n";
+        echo json_encode($match->args, JSON_PRETTY_PRINT);
+    } else {
+        echo "{$argv[0]}: url doesn't match any route.\n";
+        exit(1);
+    }
 } else {
-	usage();
+    echo $usage;
+    exit;
 }

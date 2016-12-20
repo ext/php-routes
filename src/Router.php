@@ -35,18 +35,19 @@ class Router
         include $filename;
     }
 
-    public function formatRoutes()
+    public function formatRoutes($verbose = false)
     {
         $formatter = new RouteFormatter();
+        $formatter->verbose = $verbose;
         foreach ($this->patterns as $cur) {
             $formatter->add($cur);
         }
         return (string)$formatter;
     }
 
-    public function printRoutes()
+    public function printRoutes($verbose = false)
     {
-        echo $this->formatRoutes();
+        echo $this->formatRoutes($verbose);
     }
 
     public function match($url, $method = false)
@@ -58,13 +59,12 @@ class Router
             $method = 'GET';
         }
 
-        foreach ($this->patterns as $cur) {
-            list(, $re, $cur_method, $controller, $action) = $cur;
-            if ($cur_method !== $method) {
+        foreach ($this->patterns as $route) {
+            if ($route->method !== $method) {
                 continue;
             }
 
-            if (preg_match($re, $url, $match)) {
+            if (preg_match($route->regex, $url, $match)) {
                 foreach ($match as $k => $v) {
                     if (is_numeric($k)) {
                         unset($match[$k]);
@@ -74,36 +74,42 @@ class Router
                 /* find if format suffix was specified */
                 $format = false;
                 if (array_key_exists('format', $match)) {
-                    $format = substr($match['format'], 1) /* remove dot */;
+                    $format = substr($match['format'], 1); /* remove dot */
+                    $format = $this->mimetype($format);
                     unset($match['format']);
-
-                    /* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
-                    switch ($format) {
-                        case 'html':
-                            $format = 'text/html';
-                            break;
-                        case 'json':
-                            $format = 'application/json';
-                            break;
-                        case 'md':
-                            $format = 'text/markdown';
-                            break;
-                        case 'txt':
-                            $format = 'text/plain';
-                            break;
-                        case 'xml':
-                            $format = 'application/xml';
-                            break;
-                        case 'svg':
-                            $format = 'image/svg+xml';
-                            break;
-                    }
                 }
 
-                return new RouterMatch($controller, $action, $match, $format);
+                return new RouterMatch($route->controller, $route->action, $match, $format);
             }
         }
         return null;
+    }
+
+    public function mimetype($format)
+    {
+        /* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
+        switch ($format) {
+            case 'html':
+                return 'text/html';
+                break;
+            case 'json':
+                return 'application/json';
+                break;
+            case 'md':
+                return 'text/markdown';
+                break;
+            case 'txt':
+                return 'text/plain';
+                break;
+            case 'xml':
+                return 'application/xml';
+                break;
+            case 'svg':
+                return 'image/svg+xml';
+                break;
+            default:
+                return $format;
+        }
     }
 
     protected function parseTo($str, $defaultAction = 'index')
@@ -199,8 +205,16 @@ class Router
         /* optional format suffix */
         $re .= '(?P<format>\.\w+)?';
 
+        /* push new route */
         list($controller, $action) = $this->parseTo($options['to'], $defaultAction);
-        $this->patterns[] = ["/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as)];
+        $route = new Route;
+        $route->pattern = "/$pattern";
+        $route->regex = "#^/$re$#";
+        $route->method = $method;
+        $route->controller = $controller;
+        $route->action = $action;
+        $route->name = static::pathFunctionName($as);
+        $this->patterns[] = $route;
 
         return $this->addPathFunction($pattern, $as);
     }
