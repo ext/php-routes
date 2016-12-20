@@ -16,7 +16,7 @@ class RouteFormatter
             "{$route->controller}#{$route->action}",
         ];
         if ($this->verbose) {
-            $line[] = $route->regex;
+            $line[] = preg_replace('/\?P<[a-z]+>/', '', $route->regex);
         }
         $this->lines[] = $line;
     }
