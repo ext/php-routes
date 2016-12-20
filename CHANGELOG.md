@@ -2,7 +2,9 @@
 
 ## Features
 
-- `php-routes` binary learned `-v` for verbose output.
+- `php-routes` binary learned `-v` for verbose output (non-verbose
+  mode now hides regex output.)
+- `php-routes` binary no longer writes trailing whitespace.
 
 ### Changes
 

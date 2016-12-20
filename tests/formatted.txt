@@ -1,2 +1,2 @@
-NAME    METHOD    PATTERN    TO           
-        GET       /foo       Index#foo    
+NAME    METHOD    PATTERN    TO
+        GET       /foo       Index#foo

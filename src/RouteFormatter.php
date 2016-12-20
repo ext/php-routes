@@ -57,8 +57,12 @@ class RouteFormatter
 
         foreach ($this->lines as $line) {
             for ($i = 0; $i < $columns; $i++) {
-                $w = $width[$i] + 4;
-                $output .= sprintf("%-{$w}s", $line[$i]);
+                if ($i+1 !== $columns) {
+                    $w = $width[$i] + 4;
+                    $output .= sprintf("%-{$w}s", $line[$i]);
+                } else {
+                    $output .= $line[$i];
+                }
             }
             $output .= "\n";
         }
