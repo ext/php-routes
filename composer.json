@@ -26,6 +26,13 @@
             ]
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Testing\\": [
+                "tests/"
+            ]
+        }
+    },
     "bin": [
         "bin/php-routes"
     ]

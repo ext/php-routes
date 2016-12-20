@@ -1,50 +1,49 @@
 <?php
 
-class Router extends Sidvind\PHPRoutes\Router {
-	/* expose */
-	public function parseTo($str, $defaultAction=null){
-        /* keep default from parent call */
-        if ( $defaultAction === null ){
-		    return parent::parseTo($str);
-        } else {
-            return parent::parseTo($str, $defaultAction);
-        }
-	}
-}
+namespace RouterTo;
 
-class RouterToTest extends PHPUnit_Framework_TestCase {
-	public $router;
+class RouterToTest extends \PHPUnit_Framework_TestCase
+{
+    public $router;
 
-	public function setUp(){
-		$this->router = new Router();
-	}
+    public function setUp()
+    {
+        $this->router = new \Testing\TestRouter();
+    }
 
-	public function test_blank(){
-		$this->assertEquals(['Index', 'index'], $this->router->parseTo(''));
-	}
+    public function testBlank()
+    {
+        $this->assertEquals(['Index', 'index'], $this->router->parseTo(''));
+    }
 
-	public function test_only_hash(){
-		$this->assertEquals(['Index', 'index'], $this->router->parseTo('#'));
-	}
+    public function testOnlyHash()
+    {
+        $this->assertEquals(['Index', 'index'], $this->router->parseTo('#'));
+    }
 
-	public function test_only_controller(){
-		$this->assertEquals(['Foo', 'index'], $this->router->parseTo('Foo'));
-	}
+    public function testOnlyController()
+    {
+        $this->assertEquals(['Foo', 'index'], $this->router->parseTo('Foo'));
+    }
 
-    public function test_only_controller_with_action(){
-		$this->assertEquals(['Foo', 'bar'], $this->router->parseTo('Foo', 'bar'));
-	}
+    public function testOnlyControllerWithAction()
+    {
+        $this->assertEquals(['Foo', 'bar'], $this->router->parseTo('Foo', 'bar'));
+    }
 
-	public function test_only_action(){
-		$this->assertEquals(['Index', 'foo'], $this->router->parseTo('#foo'));
-	}
+    public function testOnlyAction()
+    {
+        $this->assertEquals(['Index', 'foo'], $this->router->parseTo('#foo'));
+    }
 
-	public function test_controller_action(){
-		$this->assertEquals(['Foo', 'bar'], $this->router->parseTo('Foo#bar'));
-	}
+    public function testControllerAction()
+    {
+        $this->assertEquals(['Foo', 'bar'], $this->router->parseTo('Foo#bar'));
+    }
 
-	public function test_malformed2(){
-		$this->expectException(\BadFunctionCallException::class);
-		$this->assertEquals(['Index', 'index'], $this->router->parseTo('foo##bar'));
-	}
+    public function testMalformed2()
+    {
+        $this->expectException(\BadFunctionCallException::class);
+        $this->assertEquals(['Index', 'index'], $this->router->parseTo('foo##bar'));
+    }
 }
