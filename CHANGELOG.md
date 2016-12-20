@@ -1,5 +1,9 @@
 ## 1.2.8
 
+## Features
+
+- `php-routes` binary learned `-v` for verbose output.
+
 ### Changes
 
 - Routes are now stored in `Route` state class instead of positional

@@ -35,18 +35,19 @@ class Router
         include $filename;
     }
 
-    public function formatRoutes()
+    public function formatRoutes($verbose = false)
     {
         $formatter = new RouteFormatter();
+        $formatter->verbose = $verbose;
         foreach ($this->patterns as $cur) {
             $formatter->add($cur);
         }
         return (string)$formatter;
     }
 
-    public function printRoutes()
+    public function printRoutes($verbose = false)
     {
-        echo $this->formatRoutes();
+        echo $this->formatRoutes($verbose);
     }
 
     public function match($url, $method = false)

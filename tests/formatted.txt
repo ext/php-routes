@@ -1,2 +1,2 @@
-NAME    METHOD    PATTERN    TO           REGEXP                        
-        GET       /foo       Index#foo    #^/foo(?P<format>\.\w+)?$#    
+NAME    METHOD    PATTERN    TO           
+        GET       /foo       Index#foo    

@@ -5,16 +5,20 @@ namespace Sidvind\PHPRoutes;
 class RouteFormatter
 {
     protected $lines = [];
+    public $verbose = false;
 
     public function add($route)
     {
-        $this->lines[] = [
+        $line = [
             preg_replace('/_path$/', '', $route->name),
             $route->method,
             $route->pattern,
             "{$route->controller}#{$route->action}",
-            $route->regex,
         ];
+        if ($this->verbose) {
+            $line[] = $route->regex;
+        }
+        $this->lines[] = $line;
     }
 
     protected function columnWidths()
@@ -36,13 +40,16 @@ class RouteFormatter
         }
 
         /* header */
-        array_unshift($this->lines, [
+        $headings = [
             'NAME',
             'METHOD',
             'PATTERN',
             'TO',
-            'REGEXP',
-        ]);
+        ];
+        if ($this->verbose) {
+            $headings[] = 'REGEXP';
+        }
+        array_unshift($this->lines, $headings);
 
         $columns = count($this->lines[0]);
         $width = $this->columnWidths();

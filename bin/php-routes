@@ -3,7 +3,7 @@
 
 function usage(){
 	global $argv;
-	echo "usage: {$argv[0]} FILENAME METHOD URL\n";
+	echo "usage: {$argv[0]} [-v] FILENAME METHOD URL\n";
 	exit;
 }
 
@@ -18,14 +18,17 @@ if ( $argc === 1 ){
 	usage();
 }
 
-$filename = $argv[1];
+$options = getopt('v', []);
+$pos = array_slice($argv, count($options) + 1);
+$verbose = isset($options['v']);
+$filename = array_shift($pos);
 $router = new Sidvind\PHPRoutes\Router($filename);
 
-if ( $argc === 2 ){
-	$router->printRoutes();
-} else if ( $argc == 4 ){
-	$method = strtoupper($argv[2]);
-	$url = $argv[3];
+if ( count($pos) === 0 ){
+	$router->printRoutes($verbose);
+} else if ( count($pos) == 2 ){
+	$method = strtoupper($pos[0]);
+	$url = $pos[1];
 	$match = $router->match($url, $method);
 	if ( $match ){
 		echo "Controller: {$match->controller}\n";
