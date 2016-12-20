@@ -46,4 +46,10 @@ class RouterApiFunctionTest extends \PHPUnit_Framework_TestCase
         ob_end_clean();
         $this->assertStringEqualsFile(__DIR__ . "/formatted.txt", $this->router->formatRoutes());
     }
+
+    public function testContructorFilename()
+    {
+        $this->router = new \Testing\TestRouter(__DIR__ . '/routes.php');
+        $this->assertStringEqualsFile(__DIR__ . "/routes.txt", $this->router->formatRoutes());
+    }
 }
