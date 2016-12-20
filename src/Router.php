@@ -58,13 +58,12 @@ class Router
             $method = 'GET';
         }
 
-        foreach ($this->patterns as $cur) {
-            list(, $re, $cur_method, $controller, $action) = $cur;
-            if ($cur_method !== $method) {
+        foreach ($this->patterns as $route) {
+            if ($route->method !== $method) {
                 continue;
             }
 
-            if (preg_match($re, $url, $match)) {
+            if (preg_match($route->regex, $url, $match)) {
                 foreach ($match as $k => $v) {
                     if (is_numeric($k)) {
                         unset($match[$k]);
@@ -100,7 +99,7 @@ class Router
                     }
                 }
 
-                return new RouterMatch($controller, $action, $match, $format);
+                return new RouterMatch($route->controller, $route->action, $match, $format);
             }
         }
         return null;
@@ -199,8 +198,16 @@ class Router
         /* optional format suffix */
         $re .= '(?P<format>\.\w+)?';
 
+        /* push new route */
         list($controller, $action) = $this->parseTo($options['to'], $defaultAction);
-        $this->patterns[] = ["/$pattern", "#^/$re$#", $method, $controller, $action, static::pathFunctionName($as)];
+        $route = new Route;
+        $route->pattern = "/$pattern";
+        $route->regex = "#^/$re$#";
+        $route->method = $method;
+        $route->controller = $controller;
+        $route->action = $action;
+        $route->name = static::pathFunctionName($as);
+        $this->patterns[] = $route;
 
         return $this->addPathFunction($pattern, $as);
     }

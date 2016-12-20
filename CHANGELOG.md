@@ -1,3 +1,10 @@
+## 1.2.8
+
+### Changes
+
+- Routes are now stored in `Route` state class instead of positional
+  array.
+
 ## 1.2.7 (2016-10-25)
 
 ### Fixes

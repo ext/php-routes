@@ -5,8 +5,7 @@ namespace RouterName;
 class Router extends \Sidvind\PHPRoutes\Router {
 	public function test_name($pattern){
 		$this->method($pattern, 'GET', []);
-		list(,,,, $actual) = $this->patterns[0];
-		return $actual;
+		return $this->patterns[0]->action;
 	}
 }
 
