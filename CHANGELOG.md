@@ -4,6 +4,7 @@
 
 - Routes are now stored in `Route` state class instead of positional
   array.
+- Minor refactoring
 
 ## 1.2.7 (2016-10-25)
 

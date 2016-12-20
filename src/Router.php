@@ -73,36 +73,42 @@ class Router
                 /* find if format suffix was specified */
                 $format = false;
                 if (array_key_exists('format', $match)) {
-                    $format = substr($match['format'], 1) /* remove dot */;
+                    $format = substr($match['format'], 1); /* remove dot */
+                    $format = $this->mimetype($format);
                     unset($match['format']);
-
-                    /* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
-                    switch ($format) {
-                        case 'html':
-                            $format = 'text/html';
-                            break;
-                        case 'json':
-                            $format = 'application/json';
-                            break;
-                        case 'md':
-                            $format = 'text/markdown';
-                            break;
-                        case 'txt':
-                            $format = 'text/plain';
-                            break;
-                        case 'xml':
-                            $format = 'application/xml';
-                            break;
-                        case 'svg':
-                            $format = 'image/svg+xml';
-                            break;
-                    }
                 }
 
                 return new RouterMatch($route->controller, $route->action, $match, $format);
             }
         }
         return null;
+    }
+
+    public function mimetype($format)
+    {
+        /* hack: translate to mimetype. @todo figure out a better way, perhaps /etc/mime.types */
+        switch ($format) {
+            case 'html':
+                return 'text/html';
+                break;
+            case 'json':
+                return 'application/json';
+                break;
+            case 'md':
+                return 'text/markdown';
+                break;
+            case 'txt':
+                return 'text/plain';
+                break;
+            case 'xml':
+                return 'application/xml';
+                break;
+            case 'svg':
+                return 'image/svg+xml';
+                break;
+            default:
+                return $format;
+        }
     }
 
     protected function parseTo($str, $defaultAction = 'index')
