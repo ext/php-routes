@@ -1,6 +1,6 @@
 ## 1.2.8 (2016-12-20)
 
-## Features
+### Features
 
 - `php-routes` binary learned `-v` for verbose output (non-verbose
   mode now hides regex output.)
