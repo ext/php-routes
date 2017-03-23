@@ -15,7 +15,7 @@ class RootContextTest extends \PHPUnit_Framework_TestCase
 
     public function testGet()
     {
-        $this->router->expects($this->once())->method('method')->with(
+        $this->router->expects($this->once())->method('addRoute')->with(
             $this->equalTo('pattern'),
             $this->equalTo('GET'),
             $this->equalTo([1])
@@ -25,7 +25,7 @@ class RootContextTest extends \PHPUnit_Framework_TestCase
 
     public function testPost()
     {
-        $this->router->expects($this->once())->method('method')->with(
+        $this->router->expects($this->once())->method('addRoute')->with(
             $this->equalTo('pattern'),
             $this->equalTo('POST'),
             $this->equalTo([2])
@@ -35,7 +35,7 @@ class RootContextTest extends \PHPUnit_Framework_TestCase
 
     public function testPatch()
     {
-        $this->router->expects($this->once())->method('method')->with(
+        $this->router->expects($this->once())->method('addRoute')->with(
             $this->equalTo('pattern'),
             $this->equalTo('PATCH'),
             $this->equalTo([3])
@@ -45,7 +45,7 @@ class RootContextTest extends \PHPUnit_Framework_TestCase
 
     public function testPut()
     {
-        $this->router->expects($this->once())->method('method')->with(
+        $this->router->expects($this->once())->method('addRoute')->with(
             $this->equalTo('pattern'),
             $this->equalTo('PUT'),
             $this->equalTo([4])
@@ -55,7 +55,7 @@ class RootContextTest extends \PHPUnit_Framework_TestCase
 
     public function testDelete()
     {
-        $this->router->expects($this->once())->method('method')->with(
+        $this->router->expects($this->once())->method('addRoute')->with(
             $this->equalTo('pattern'),
             $this->equalTo('DELETE'),
             $this->equalTo([5])

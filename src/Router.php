@@ -14,16 +14,16 @@ class Router
         }
 
         $get = function ($pattern, array $options = []) {
-            $this->method($pattern, 'GET', $options);
+            $this->addRoute($pattern, 'GET', $options);
         };
         $post = function ($pattern, array $options = []) {
-            $this->method($pattern, 'POST', $options);
+            $this->addRoute($pattern, 'POST', $options);
         };
         $put = function ($pattern, array $options = []) {
-            $this->method($pattern, 'PUT', $options);
+            $this->addRoute($pattern, 'PUT', $options);
         };
         $delete = function ($pattern, array $options = []) {
-            $this->method($pattern, 'DELETE', $options);
+            $this->addRoute($pattern, 'DELETE', $options);
         };
         $resource = function ($pattern, array $options = [], $callback = false) {
             $this->resource($pattern, $options, $callback);
@@ -179,7 +179,7 @@ class Router
      *                      is the RE for matching, e.g. '[0-9]+' for a required
      *                      number.
      */
-    public function method($pattern, $method, $options)
+    public function addRoute($pattern, $method, $options)
     {
         $pattern = trim($pattern, '/');
 
@@ -344,26 +344,26 @@ class Router
             $o = array_merge($options, ['to' => static::resourceTo($m, $options)]);
             switch ($m) {
                 case 'list':
-                    $this->method("/$pattern", 'GET', array_merge($o, ['as' => [$as_stem, $as_func]]));
+                    $this->addRoute("/$pattern", 'GET', array_merge($o, ['as' => [$as_stem, $as_func]]));
                     break;
                 case 'create':
-                    $this->method("/$pattern", 'POST', array_merge($o, ['as' => "create_{$as_stem}"]));
+                    $this->addRoute("/$pattern", 'POST', array_merge($o, ['as' => "create_{$as_stem}"]));
                     break;
                 case 'new':
-                    $this->method("/$pattern/new", 'GET', array_merge($o, ['as' => "new_{$as_stem}"]));
+                    $this->addRoute("/$pattern/new", 'GET', array_merge($o, ['as' => "new_{$as_stem}"]));
                     break;
                 case 'edit':
-                    $this->method("/$pattern/:id/edit", 'GET', array_merge($o, ['as' => "edit_{$as_stem}"]));
+                    $this->addRoute("/$pattern/:id/edit", 'GET', array_merge($o, ['as' => "edit_{$as_stem}"]));
                     break;
                 case 'show':
-                    $this->method("/$pattern/:id", 'GET', array_merge($o, ['as' => [$as_stem, $as_func]]));
+                    $this->addRoute("/$pattern/:id", 'GET', array_merge($o, ['as' => [$as_stem, $as_func]]));
                     break;
                 case 'destroy':
-                    $this->method("/$pattern/:id", 'DELETE', array_merge($o, ['as' => "destroy_{$as_stem}"]));
+                    $this->addRoute("/$pattern/:id", 'DELETE', array_merge($o, ['as' => "destroy_{$as_stem}"]));
                     break;
                 case 'update':
-                    $this->method("/$pattern/:id", 'PUT', array_merge($o, ['as' => "update_{$as_stem}"]));
-                    $this->method("/$pattern/:id", 'PATCH', $o);
+                    $this->addRoute("/$pattern/:id", 'PUT', array_merge($o, ['as' => "update_{$as_stem}"]));
+                    $this->addRoute("/$pattern/:id", 'PATCH', $o);
                     break;
             }
         }

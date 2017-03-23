@@ -1,3 +1,11 @@
+## 1.3.0 (2017-03-23)
+
+### Changes
+
+- `Router::method` is renamed to `Router::addRoute`. API breaking but should not
+  be called directly by users. The motivation is to make it easier to use
+  PHPUnit mocks.
+
 ## 1.2.8 (2016-12-20)
 
 ### Features

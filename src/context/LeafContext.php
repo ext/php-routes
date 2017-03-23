@@ -17,36 +17,36 @@ class LeafContext
 
     public function get($pattern, array $options = [])
     {
-        $this->method($pattern, 'GET', $options);
+        $this->addRoute($pattern, 'GET', $options);
     }
 
     public function post($pattern, array $options = [])
     {
-        $this->method($pattern, 'POST', $options);
+        $this->addRoute($pattern, 'POST', $options);
     }
 
     public function patch($pattern, array $options = [])
     {
-        $this->method($pattern, 'PATCH', $options);
+        $this->addRoute($pattern, 'PATCH', $options);
     }
 
     public function put($pattern, array $options = [])
     {
-        $this->method($pattern, 'PUT', $options);
+        $this->addRoute($pattern, 'PUT', $options);
     }
 
     public function delete($pattern, array $options = [])
     {
-        $this->method($pattern, 'DELETE', $options);
+        $this->addRoute($pattern, 'DELETE', $options);
     }
 
-    public function method($pattern, $method, array $options = [])
+    public function addRoute($pattern, $method, array $options = [])
     {
         $pattern = ltrim($pattern, '/');
         $default_to = $this->options['to'] . '#' . Utils::actionname($pattern);
         $options = array_merge($this->options, ['to' => $default_to], $options);
         $options = $this->fillTo($options);
-        $this->router->method("{$this->namespace}/{$pattern}", $method, $options);
+        $this->router->addRoute("{$this->namespace}/{$pattern}", $method, $options);
     }
 
     /**

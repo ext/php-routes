@@ -13,47 +13,47 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testSimple()
     {
-        $this->router->method('foo', 'GET', ['to' => 'Test#action']);
-        $this->router->method('bar', 'GET', []);
+        $this->router->addRoute('foo', 'GET', ['to' => 'Test#action']);
+        $this->router->addRoute('bar', 'GET', []);
         $this->assertMatch('/foo', 'GET', 'Test', 'action');
         $this->assertMatch('/bar', 'GET', 'Index', 'bar');
     }
 
     public function testMethod()
     {
-        $this->router->method('foo', 'PATCH', ['to' => 'Test#action']);
+        $this->router->addRoute('foo', 'PATCH', ['to' => 'Test#action']);
         $this->assertMatch('/foo', 'PATCH', 'Test', 'action');
     }
 
     public function testMethodOnlyController()
     {
-        $this->router->method('foo', 'GET', ['to' => 'Test']);
+        $this->router->addRoute('foo', 'GET', ['to' => 'Test']);
         $this->assertMatch('/foo', 'GET', 'Test', 'foo');
     }
 
     public function testHead()
     {
-        $this->router->method('foo', 'GET', ['to' => 'Test#action']);
+        $this->router->addRoute('foo', 'GET', ['to' => 'Test#action']);
         $this->assertMatch('/foo', 'GET', 'Test', 'action');
         $this->assertMatch('/foo', 'HEAD', 'Test', 'action');
     }
 
     public function testWrongMethod()
     {
-        $this->router->method('foo', 'PATCH', ['to' => 'Test#action']);
+        $this->router->addRoute('foo', 'PATCH', ['to' => 'Test#action']);
         $match = $this->router->match('/foo', 'GET');
         $this->assertFalse((boolean)$match);
     }
 
     public function testArgs()
     {
-        $this->router->method('foo/:id', 'GET', ['to' => 'Test#action']);
+        $this->router->addRoute('foo/:id', 'GET', ['to' => 'Test#action']);
         $this->assertMatch('/foo/7', 'GET', 'Test', 'action', ['id' => 7]);
     }
 
     public function testFormat()
     {
-        $this->router->method('foo', 'GET', ['to' => 'Test#action']);
+        $this->router->addRoute('foo', 'GET', ['to' => 'Test#action']);
         $match = $this->router->match('/foo.json', 'GET');
         $this->assertTrue((boolean)$match);
         $this->assertEquals('Test', $match->controller);
@@ -64,7 +64,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testFormatMimetype()
     {
-        $this->router->method('foo', 'GET', ['to' => 'Test#action']);
+        $this->router->addRoute('foo', 'GET', ['to' => 'Test#action']);
         $this->assertEquals('text/html', $this->router->match('/foo.html', 'GET')->format);
         $this->assertEquals('application/json', $this->router->match('/foo.json', 'GET')->format);
         $this->assertEquals('text/markdown', $this->router->match('/foo.md', 'GET')->format);
@@ -76,8 +76,8 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
     public function testScope()
     {
         $this->router->scope('foo', [], function ($r) {
-            $r->method('bar', 'GET', ['to' => 'Test#action']);
-            $r->method('baz', 'GET', []);
+            $r->addRoute('bar', 'GET', ['to' => 'Test#action']);
+            $r->addRoute('baz', 'GET', []);
         });
         $this->assertMatch('/foo/bar', 'GET', 'Test', 'action');
         $this->assertMatch('/foo/baz', 'GET', 'Index', 'baz');
@@ -86,8 +86,8 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
     public function testScopeVariable()
     {
         $this->router->scope(':lang', [], function ($r) {
-            $r->method('bar', 'GET', ['to' => 'Test#action']);
-            $r->method('baz', 'GET', []);
+            $r->addRoute('bar', 'GET', ['to' => 'Test#action']);
+            $r->addRoute('baz', 'GET', []);
         });
         $this->assertMatch('/en/bar', 'GET', 'Test', 'action', ['lang' => 'en']);
         $this->assertMatch('/en/baz', 'GET', 'Index', 'baz', ['lang' => 'en']);
@@ -97,8 +97,8 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $this->router->scope('foo', [], function ($r) {
             $r->scope('bar', [], function ($r) {
-                $r->method('spam', 'GET', ['to' => 'Test#action']);
-                $r->method('ham', 'GET', []);
+                $r->addRoute('spam', 'GET', ['to' => 'Test#action']);
+                $r->addRoute('ham', 'GET', []);
             });
         });
         $this->assertMatch('/foo/bar/spam', 'GET', 'Test', 'action');
@@ -109,7 +109,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
     {
         $this->router->scope('foo', [], function ($r) {
             $r->scope('bar', ['to' => 'Bar'], function ($r) {
-                $r->method('baz', 'GET', []);
+                $r->addRoute('baz', 'GET', []);
             });
         });
         $this->assertMatch('/foo/bar/baz', 'GET', 'Bar', 'baz');

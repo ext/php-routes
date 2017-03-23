@@ -22,7 +22,7 @@ class TestRouter extends \Sidvind\PHPRoutes\Router
 
     public function testName($pattern)
     {
-        $this->method($pattern, 'GET', []);
+        $this->addRoute($pattern, 'GET', []);
         return $this->patterns[0]->action;
     }
 }

@@ -14,7 +14,7 @@ class RouterApiFunctionTest extends \PHPUnit_Framework_TestCase
     public function testClear()
     {
         $this->assertEquals(0, $this->router->numRoutes());
-        $this->router->method('foo', 'GET', []);
+        $this->router->addRoute('foo', 'GET', []);
         $this->assertEquals(1, $this->router->numRoutes());
         $this->router->clear();
         $this->assertEquals(0, $this->router->numRoutes());
@@ -22,13 +22,13 @@ class RouterApiFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testFormatRoutes()
     {
-        $this->router->method('foo', 'GET', []);
+        $this->router->addRoute('foo', 'GET', []);
         $this->assertStringEqualsFile(__DIR__ . "/formatted.txt", $this->router->formatRoutes());
     }
 
     public function testFormatRoutesVerbose()
     {
-        $this->router->method('foo', 'GET', []);
+        $this->router->addRoute('foo', 'GET', []);
         $this->assertStringEqualsFile(__DIR__ . "/formatted-verbose.txt", $this->router->formatRoutes(true));
     }
 
@@ -39,7 +39,7 @@ class RouterApiFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testPrintRoutesEmpty()
     {
-        $this->router->method('foo', 'GET', []);
+        $this->router->addRoute('foo', 'GET', []);
         ob_start();
         $this->router->printRoutes();
         $string = ob_get_contents();
