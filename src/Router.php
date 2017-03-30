@@ -10,13 +10,15 @@ class Router
     public static $default_format = '[A-Za-z0-9\-_\.]+';
 
     /**
-     * Regexps for matching specific varialbes.
+     * Regexps for matching specific variables.
      *
-     * $variable_formats = [
-     *   'foo' => '\d+',
-     * ];
+     * .. code-block:: php
      *
-     * will only match digits when adding a route '/:foo/'
+     *     $variable_formats = [
+     *       'foo' => '\d+',
+     *     ];
+     *
+     * will only match digits when adding a route ``/:foo/``
      */
     public static $variable_formats = [];
 
@@ -52,6 +54,11 @@ class Router
         include $filename;
     }
 
+    /**
+     * Describe available routes in human-readable form.
+     *
+     * :returns: String with description.
+     */
     public function formatRoutes($verbose = false)
     {
         $formatter = new RouteFormatter();
@@ -62,11 +69,22 @@ class Router
         return (string)$formatter;
     }
 
+    /**
+     * Print available routes in human-readable form.
+     */
     public function printRoutes($verbose = false)
     {
         echo $this->formatRoutes($verbose);
     }
 
+    /**
+     * Match a request against routes.
+     *
+     * :param string $url: Request URL.
+     * :param string|false $method: Request method or false to read from ``$_SERVER['REQUEST_METHOD']``.
+     * :returns: Matching route or false.
+     * :rtype: :doc:`routermatch`
+     */
     public function match($url, $method = false)
     {
         $method = $method ?: $_SERVER['REQUEST_METHOD'];
@@ -179,22 +197,23 @@ class Router
     /**
      * Add a new route.
      *
-     * Format:
-     * Basic format is '/path/to/match' which literally matches the url.
-     * Variables can be assigned using '/foo/:bar' where the second part is a
+     * Basic format is ``/path/to/match`` which literally matches the url.
+     * Variables can be assigned using ``/foo/:bar`` where the second part is a
      * variable called bar. By default variables accept almost anything but the
-     * regular expression can be tuned using the option 'bar_format' (see below).
+     * regular expression can be tuned using the option ``bar_format`` (see below).
      * Patterns may also contain regular expressions.
      *
-     * @param $pattern Route pattern to match, see format description above.
-     * @param $method Which HTTP method to match.
-     * @param $options Array of options:
-     * @option 'to' Target controller/action. [controller][#action]
-     * @option 'as' Name of this route.
-     * @option 'var_format' Variable format. 'var' should be replaced with the
-     *                      actual variable name, like 'bar_format'. The value
-     *                      is the RE for matching, e.g. '[0-9]+' for a required
-     *                      number.
+     * :param string $pattern: Route pattern to match, see format description above.
+     * :param string $method: Which HTTP method to match.
+     * :param array $options:
+     *     Array of options:
+     *       - ``to`` Target controller/action. [controller][#action]
+     *       - ``as`` Name of this route.
+     *       - ``var_format`` Variable format. ``var`` should be replaced with the
+     *         actual variable name, like 'bar_format'. The value
+     *         is the RE for matching, e.g. ``[0-9]+`` for a required
+     *         number.
+     * :returns: Generated path function.
      */
     public function addRoute($pattern, $method, $options)
     {

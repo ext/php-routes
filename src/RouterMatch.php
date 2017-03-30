@@ -4,10 +4,25 @@ namespace Sidvind\PHPRoutes;
 
 class RouterMatch
 {
-    public $controller;        /* controller name (via 'to' route parameter) */
-    public $action;            /* controller action (via 'to' route parameter) */
-    public $args;              /* assoc array with named arguments */
-    public $format;            /* requested format or false for any */
+    /**
+     * Controller name (via ``to`` route parameter)
+     */
+    public $controller;
+
+    /**
+     * Controller action (via ``to`` route parameter)
+     */
+    public $action;
+
+    /**
+     * Associative array with variables from matched pattern.
+     */
+    public $args;
+
+    /**
+     * Requested format or false if no extension was specified.
+     */
+    public $format;
 
     public function __construct($controller, $action, $args, $format)
     {
