@@ -194,11 +194,9 @@ class Router
         $as = $options['as'];
 
         $re = preg_replace_callback('/:([a-z]+)/', function ($x) use ($options) {
-            $fmt = '[A-Za-z0-9\-_\.]+'; /* default variable format */
-            if (isset($options[$x[1] . '_format'])) {
-                $fmt = $options[$x[1] . '_format'];
-            }
-            return "(?P<{$x[1]}>$fmt)";
+            $name = $x[1];
+            $format = $this->getVariableFormat($name, $options);
+            return "(?P<{$name}>{$format})";
         }, $pattern);
         preg_match_all('/:([a-z]+)/', $pattern, $args);
 
@@ -229,6 +227,15 @@ class Router
         } else {
             return "${as[0]}_path";
         }
+    }
+
+    protected function getVariableFormat($name, array $options)
+    {
+        $key = $name . '_format';
+        if (isset($options[$key])) {
+            return $options[$key];
+        }
+        return '[A-Za-z0-9\-_\.]+';
     }
 
     public static function basePath()
