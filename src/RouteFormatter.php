@@ -7,7 +7,7 @@ class RouteFormatter
     protected $lines = [];
     public $verbose = false;
 
-    public function add($route)
+    public function add(Route $route)
     {
         $line = [
             preg_replace('/_path$/', '', $route->name),
