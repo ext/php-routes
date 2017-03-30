@@ -1,3 +1,10 @@
+## --
+
+### Features
+
+* Added `Router::$default_format` and `Router::$variable_formats` for setting
+  application-wide format settings.
+
 ## 1.3.0 (2017-03-23)
 
 ### Changes

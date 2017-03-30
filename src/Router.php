@@ -4,6 +4,23 @@ namespace Sidvind\PHPRoutes;
 
 class Router
 {
+    /**
+     * Default regexp for matching variables.
+     */
+    public static $default_format = '[A-Za-z0-9\-_\.]+';
+
+    /**
+     * Regexps for matching specific varialbes.
+     *
+     * $variable_formats = [
+     *   'foo' => '\d+',
+     * ];
+     *
+     * will only match digits when adding a route '/:foo/'
+     */
+    public static $variable_formats = [];
+
+
     protected $patterns = [];
     private $path_methods = [];
 
@@ -194,11 +211,9 @@ class Router
         $as = $options['as'];
 
         $re = preg_replace_callback('/:([a-z]+)/', function ($x) use ($options) {
-            $fmt = '[A-Za-z0-9\-_\.]+'; /* default variable format */
-            if (isset($options[$x[1] . '_format'])) {
-                $fmt = $options[$x[1] . '_format'];
-            }
-            return "(?P<{$x[1]}>$fmt)";
+            $name = $x[1];
+            $format = $this->getVariableFormat($name, $options);
+            return "(?P<{$name}>{$format})";
         }, $pattern);
         preg_match_all('/:([a-z]+)/', $pattern, $args);
 
@@ -229,6 +244,18 @@ class Router
         } else {
             return "${as[0]}_path";
         }
+    }
+
+    protected function getVariableFormat($name, array $options)
+    {
+        $key = $name . '_format';
+        if (isset($options[$key])) {
+            return $options[$key];
+        }
+        if (isset(static::$variable_formats[$name])) {
+            return static::$variable_formats[$name];
+        }
+        return static::$default_format;
     }
 
     public static function basePath()
