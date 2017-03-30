@@ -4,6 +4,23 @@ namespace Sidvind\PHPRoutes;
 
 class Router
 {
+    /**
+     * Default regexp for matching variables.
+     */
+    public static $default_format = '[A-Za-z0-9\-_\.]+';
+
+    /**
+     * Regexps for matching specific varialbes.
+     *
+     * $variable_formats = [
+     *   'foo' => '\d+',
+     * ];
+     *
+     * will only match digits when adding a route '/:foo/'
+     */
+    public static $variable_formats = [];
+
+
     protected $patterns = [];
     private $path_methods = [];
 
@@ -235,7 +252,10 @@ class Router
         if (isset($options[$key])) {
             return $options[$key];
         }
-        return '[A-Za-z0-9\-_\.]+';
+        if (isset(static::$variable_formats[$name])) {
+            return static::$variable_formats[$name];
+        }
+        return static::$default_format;
     }
 
     public static function basePath()

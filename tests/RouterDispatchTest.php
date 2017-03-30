@@ -4,10 +4,23 @@ namespace RouterDispatch;
 
 class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
 {
+    private static $variable_formats;
+    private static $default_format;
+
     public $router;
+
+    public static function setUpBeforeClass()
+    {
+        /* save defaults */
+        static::$variable_formats = \Sidvind\PHPRoutes\Router::$variable_formats;
+        static::$default_format = \Sidvind\PHPRoutes\Router::$default_format;
+    }
 
     public function setUp()
     {
+        /* restore statics */
+        \Sidvind\PHPRoutes\Router::$variable_formats = static::$variable_formats;
+        \Sidvind\PHPRoutes\Router::$default_format = static::$default_format;
         $this->router = new \Sidvind\PHPRoutes\Router();
     }
 
@@ -240,6 +253,29 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertMatch('/patch', 'PATCH', 'Index', 'patch');
         $this->assertMatch('/post', 'POST', 'Index', 'post');
         $this->assertMatch('/put', 'PUT', 'Index', 'put');
+    }
+
+    public function testVariableFormat()
+    {
+        $this->router->addRoute(':foo', 'GET', ['to' => '#foo', 'foo_format' => '\d+']);
+        $this->assertTrue((boolean)$this->router->match('/1234', 'GET'));
+        $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
+    }
+
+    public function testVariableFormatStaticDefault()
+    {
+        \Sidvind\PHPRoutes\Router::$variable_formats['foo'] = '\d+';
+        $this->router->addRoute(':foo', 'GET', ['to' => '#foo']);
+        $this->assertTrue((boolean)$this->router->match('/1234', 'GET'));
+        $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
+    }
+
+    public function testVariableFormatGlobalStaticDefault()
+    {
+        \Sidvind\PHPRoutes\Router::$default_format = '\d+';
+        $this->router->addRoute(':foo', 'GET', ['to' => '#foo']);
+        $this->assertTrue((boolean)$this->router->match('/1234', 'GET'));
+        $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
     }
 
     protected function assertMatch($url, $method, $controller, $action, array $args = [])
