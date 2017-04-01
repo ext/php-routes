@@ -166,3 +166,17 @@ html_context = {
   "conf_py_path": "/docs/",
   "source_suffix": source_suffix,
 }
+
+# Generate API documentation
+import os, sys
+sys.path.insert(0, os.path.abspath('.'))
+import apidoc
+api = {
+    'classes/router.rst': '../src/Router.php',
+    'classes/routermatch.rst': '../src/RouterMatch.php',
+}
+if not os.path.exists('classes'):
+    os.makedirs('classes')
+for dst, src in api.iteritems():
+    with open(dst, 'w') as fp:
+        fp.write(''.join(apidoc.transform(open(src).read())))
