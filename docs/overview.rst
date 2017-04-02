@@ -99,3 +99,9 @@ To preview/debug routes use ``bin/php-routes``:
 
     # bin/php-routes routes.php get /bar
     bin/php-routes: url doesn't match any route.
+
+Contributing
+============
+
+All contributions are welcome but keep design goals in mind when submitting pull
+requests.
