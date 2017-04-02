@@ -35,6 +35,9 @@ class Router
         $get = function ($pattern, array $options = []) {
             $this->addRoute($pattern, 'GET', $options);
         };
+        $patch = function ($pattern, array $options = []) {
+            $this->addRoute($pattern, 'PATCH', $options);
+        };
         $post = function ($pattern, array $options = []) {
             $this->addRoute($pattern, 'POST', $options);
         };
@@ -49,6 +52,9 @@ class Router
         };
         $scope = function ($pattern, array $options = [], $callback) {
             $this->scope($pattern, $options, $callback);
+        };
+        $addRoute = function ($pattern, $method, array $options = []) {
+            $this->addRoute($pattern, $method, $options);
         };
 
         include $filename;

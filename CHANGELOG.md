@@ -2,6 +2,8 @@
 
 ### Features
 
+* Added global `$patch` and `$addRoute`, the latter for defining fully custom
+  routes.
 * Added `RouterMatch::$options` to supply user-defined options.
 * Added documentation.
 * Added `Router::$default_format` and `Router::$variable_formats` for setting
