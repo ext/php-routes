@@ -10,4 +10,5 @@ class Route
     public $method;
     public $controller;
     public $action;
+    public $options;
 }

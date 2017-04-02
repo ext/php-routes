@@ -178,5 +178,6 @@ api = {
 if not os.path.exists('classes'):
     os.makedirs('classes')
 for dst, src in api.iteritems():
+    print 'Generating', dst
     with open(dst, 'w') as fp:
         fp.write(''.join(apidoc.transform(open(src).read())))

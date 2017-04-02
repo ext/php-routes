@@ -1,6 +1,9 @@
 Dispatcher
 ==========
 
+.. role:: php(code)
+   :language: php
+
 Sample dispatcher:
 
 .. code-block:: php
@@ -17,3 +20,15 @@ Sample dispatcher:
          }
        }
     }
+
+Matches
+-------
+
+When calling :php:`$this->match($url, $method)` a :doc:`classes/routermatch` or ``null``
+is returned. The ``RouterMatch`` instance contains all data about the matched route:
+
+- Controller
+- Action
+- Variables
+- Extension (format)
+- User-defined options (any extra options passed when creating the route)

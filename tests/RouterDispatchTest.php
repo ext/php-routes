@@ -278,6 +278,14 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
     }
 
+    public function testArbitraryOptions()
+    {
+        $this->router->addRoute('foo/:id', 'GET', ['to' => '#foo', 'id_format' => '\d+', 'foo' => 'bar']);
+        $match = $this->router->match('/foo/12', 'GET');
+        $this->assertTrue((boolean)$match, "URL should match a route");
+        $this->assertEquals(['foo' => 'bar'], $match->options, "Match options should be set");
+    }
+
     protected function assertMatch($url, $method, $controller, $action, array $args = [])
     {
         $match = $this->router->match($url, $method);

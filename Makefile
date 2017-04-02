@@ -1,4 +1,4 @@
-.PHONY: test coverage
+.PHONY: test coverage docs
 
 test:
 	@tests/phpunit
@@ -6,3 +6,6 @@ test:
 
 coverage:
 	@tests/phpunit --coverage-text
+
+docs:
+	$(MAKE) -C docs html

@@ -82,7 +82,7 @@ class Router
      *
      * :param string $url: Request URL.
      * :param string|false $method: Request method or false to read from ``$_SERVER['REQUEST_METHOD']``.
-     * :returns: Matching route or false.
+     * :returns: Matching route or null.
      * :rtype: :doc:`routermatch`
      */
     public function match($url, $method = false)
@@ -114,7 +114,7 @@ class Router
                     unset($match['format']);
                 }
 
-                return new RouterMatch($route->controller, $route->action, $match, $format);
+                return new RouterMatch($route->controller, $route->action, $match, $format, $route->options);
             }
         }
         return null;
@@ -248,6 +248,7 @@ class Router
         $route->controller = $controller;
         $route->action = $action;
         $route->name = static::pathFunctionName($as);
+        $route->options = static::filterOptions($options);
         $this->patterns[] = $route;
 
         return $this->addPathFunction($pattern, $as);
@@ -263,6 +264,16 @@ class Router
         } else {
             return "${as[0]}_path";
         }
+    }
+
+    private static function filterOptions(array $options)
+    {
+        return array_filter($options, function ($key) {
+            return !(
+                preg_match('/_format$/', $key) ||
+                in_array($key, ['to', 'as', 'only', 'except'])
+            );
+        }, ARRAY_FILTER_USE_KEY);
     }
 
     protected function getVariableFormat($name, array $options)

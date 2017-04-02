@@ -2,6 +2,8 @@
 
 ### Features
 
+* Added `RouterMatch::$options` to supply user-defined options.
+* Added documentation.
 * Added `Router::$default_format` and `Router::$variable_formats` for setting
   application-wide format settings.
 
