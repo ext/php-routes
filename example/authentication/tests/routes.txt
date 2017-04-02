@@ -1,0 +1,3 @@
+NAME    METHOD    PATTERN         TO           REGEXP
+        GET       /public/foo     Index#foo    #^/public/foo(\.\w+)?$#
+        GET       /private/foo    Index#foo    #^/private/foo(\.\w+)?$#
