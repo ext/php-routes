@@ -17,6 +17,12 @@ What it does not:
 
 However, the dispatcher makes it easy to implement all of above.
 
+The design goals are:
+
+* Lightweight
+* Few or no dependencies
+* Easy to write tests for
+
 Requirements
 ============
 
