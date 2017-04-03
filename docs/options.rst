@@ -100,18 +100,18 @@ the variable name and the value is a regexp to match it.
 
 Any character is allowed, including ``/``.
 
-The default format can be modified by setting the static variables
-:php:`Router::$default_format` (global default) or
-:php:`Router::$variable_formats` (per variable default):
+The default format can be modified in ``routes.php`` by setting one of the
+following variables:
+
+* :php:`Router::$default_format` (string) for a global default.
+* :php:`Router::$variable_formats` (array) for per-variable format.
 
 .. code-block:: php
 
-    class MyRouter extends \Sidvind\PHPRoutes\Router {
-        /* default for all variables */
-        public static $default_format = '\d+';
+    /* default for all variables */
+		static::$default_format = '\d+';
 
-        /* default for 'foo' variable */
-        public static $variable_formats = [
-            'foo' => '\d+',
-        ];
-    }
+    /* default for 'foo' variable */
+    static::$variable_formats = [
+        'foo' => '\d+',
+    ];
