@@ -84,6 +84,7 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('text/plain', $this->router->match('/foo.txt', 'GET')->format);
         $this->assertEquals('application/xml', $this->router->match('/foo.xml', 'GET')->format);
         $this->assertEquals('image/svg+xml', $this->router->match('/foo.svg', 'GET')->format);
+        $this->assertEquals('bar', $this->router->match('/foo.bar', 'GET')->format);
     }
 
     public function testScope()
