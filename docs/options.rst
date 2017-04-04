@@ -109,7 +109,7 @@ following variables:
 .. code-block:: php
 
     /* default for all variables */
-		static::$default_format = '\d+';
+    static::$default_format = '\d+';
 
     /* default for 'foo' variable */
     static::$variable_formats = [
