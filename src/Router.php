@@ -166,8 +166,8 @@ class Router
                 return [$match[0], $defaultAction];
             case 2:
                 return [$match[0] ?: 'Index', $match[1]];
-        }
-    }
+        }   // @codeCoverageIgnore
+    }       // @codeCoverageIgnore
 
     protected function defaultAction($pattern)
     {
