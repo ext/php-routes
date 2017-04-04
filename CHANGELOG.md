@@ -1,5 +1,10 @@
 ## --
 
+### Changes
+
+* Non-existing path functions now trigger `E_USER_WARNING` instead of
+  `E_USER_ERROR` as execution can continue even without it.
+
 ### Features
 
 * Added global `$patch` and `$addRoute`, the latter for defining fully custom

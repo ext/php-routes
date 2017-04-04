@@ -88,6 +88,7 @@ class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase
 
     public function testCallMissing()
     {
+        @$this->router->foo_path(); // hack to get coverage for the line after trigger_error
         $this->expectException(\PHPUnit_Framework_Error::class);
         $this->router->foo_path();
     }
