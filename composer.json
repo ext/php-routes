@@ -29,7 +29,8 @@
     "autoload-dev": {
         "psr-4": {
             "Testing\\": ["tests/"],
-            "Example\\Authentication\\": ["example/authentication"]
+            "Example\\Authentication\\": ["example/authentication"],
+            "Example\\REST\\": ["example/rest"]
         }
     },
     "bin": [
