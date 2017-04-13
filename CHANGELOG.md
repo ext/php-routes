@@ -1,3 +1,10 @@
+## 1.4.1 (2017-04-13)
+
+### Features
+
+* Added `Router::loadRoutes` for loading routes from file later. Constructor
+  still takes filename as before.
+
 ## 1.4.0 (2017-04-09)
 
 ### Changes

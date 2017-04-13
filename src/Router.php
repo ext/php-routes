@@ -28,10 +28,16 @@ class Router
 
     public function __construct($filename = false)
     {
-        if (!$filename) {
-            return;
+        if ($filename) {
+            $this->loadRoutes($filename);
         }
+    }
 
+    /**
+     * Load routes from file.
+     */
+    public function loadRoutes($filename)
+    {
         $get = function ($pattern, array $options = []) {
             $this->addRoute($pattern, 'GET', $options);
         };
