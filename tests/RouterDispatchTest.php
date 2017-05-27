@@ -150,6 +150,19 @@ class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
         $this->assertMatch('/foo/article/7', 'DELETE', 'Article', 'destroy', ['id' => 7]);
     }
 
+    public function testScopeResourceLeadingSlash()
+    {
+        $this->router->scope('foo', [], function ($r) {
+            $r->resource('/article');
+        });
+        $this->assertMatch('/foo/article', 'GET', 'Article', 'index');
+        $this->assertMatch('/foo/article', 'POST', 'Article', 'create');
+        $this->assertMatch('/foo/article/7', 'GET', 'Article', 'show', ['id' => 7]);
+        $this->assertMatch('/foo/article/7', 'PUT', 'Article', 'update', ['id' => 7]);
+        $this->assertMatch('/foo/article/7', 'PATCH', 'Article', 'update', ['id' => 7]);
+        $this->assertMatch('/foo/article/7', 'DELETE', 'Article', 'destroy', ['id' => 7]);
+    }
+
     public function testResource()
     {
         $this->router->resource('article');

@@ -6,6 +6,7 @@ class ScopeContext extends LeafContext
 {
     public function resource($pattern, array $options = [], $callback = false)
     {
+        $pattern = ltrim($pattern, '/');
         $prefix = $this->options['to'] ?: '';
         $defaults = [
             'to' => $prefix . Utils::classname($pattern),
