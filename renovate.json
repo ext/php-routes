@@ -1,0 +1,18 @@
+{
+    "extends": [
+        "config:base",
+        ":automergeBranch",
+        ":automergeMinor",
+        ":gitSignOff",
+        ":label(renovate)",
+        ":prNotPending",
+        ":rebaseStalePrs"
+    ],
+    "stabilityDays": 1,
+    "packageRules": [
+        {
+            "depTypeList": ["dependencies", "peerDependencies"],
+            "semanticCommitType": "fix"
+        }
+    ]
+}
