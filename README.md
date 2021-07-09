@@ -1,7 +1,7 @@
 PHP-routes
 ==========
 
-[![Build Status](https://travis-ci.org/ext/php-routes.svg?branch=master)](https://travis-ci.org/ext/php-routes) [![Coverage Status](https://coveralls.io/repos/github/ext/php-routes/badge.svg?branch=master)](https://coveralls.io/github/ext/php-routes?branch=master)
+[![PHP](https://github.com/ext/php-routes/actions/workflows/php.yml/badge.svg)](https://github.com/ext/php-routes/actions/workflows/php.yml) [![Coverage Status](https://coveralls.io/repos/github/ext/php-routes/badge.svg?branch=master)](https://coveralls.io/github/ext/php-routes?branch=master)
 [![Documentation](https://readthedocs.org/projects/pip/badge/?version=latest)](http://php-routes.readthedocs.io/en/latest/)
 
 Routing for MVC-ish PHP projects.
