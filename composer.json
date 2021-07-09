@@ -33,6 +33,10 @@
             "Example\\REST\\": ["example/rest"]
         }
     },
+    "scripts": {
+        "lint": "phpcs",
+        "test": "phpunit --configuration tests/phpunit.xml"
+    },
     "bin": [
         "bin/php-routes"
     ]
