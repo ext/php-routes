@@ -2,7 +2,7 @@
 
 namespace RouterUtils;
 
-class RouterUtilsTest extends \PHPUnit_Framework_TestCase
+class RouterUtilsTest extends \PHPUnit\Framework\TestCase
 {
     public static $src = ['a', 'b', 'c', 'd'];
 

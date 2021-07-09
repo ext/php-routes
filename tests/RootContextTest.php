@@ -2,12 +2,12 @@
 
 namespace RouterContext;
 
-class RootContextTest extends \PHPUnit_Framework_TestCase
+class RootContextTest extends \PHPUnit\Framework\TestCase
 {
     public $router;
     public $context;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->router = $this->createMock('\Sidvind\PHPRoutes\Router');
         $this->context = new \Sidvind\PHPRoutes\RootContext($this->router);

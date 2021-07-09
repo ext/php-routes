@@ -56,7 +56,7 @@ class Router
         $resource = function ($pattern, array $options = [], $callback = false) {
             $this->resource($pattern, $options, $callback);
         };
-        $scope = function ($pattern, array $options = [], $callback) {
+        $scope = function ($pattern, array $options = [], $callback = false) {
             $this->scope($pattern, $options, $callback);
         };
         $addRoute = function ($pattern, $method, array $options = []) {

@@ -2,21 +2,21 @@
 
 namespace RouterDispatch;
 
-class RouterDispatchFunctionTest extends \PHPUnit_Framework_TestCase
+class RouterDispatchFunctionTest extends \PHPUnit\Framework\TestCase
 {
     private static $variable_formats;
     private static $default_format;
 
     public $router;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         /* save defaults */
         static::$variable_formats = \Sidvind\PHPRoutes\Router::$variable_formats;
         static::$default_format = \Sidvind\PHPRoutes\Router::$default_format;
     }
 
-    public function setUp()
+    public function setUp(): void
     {
         /* restore statics */
         \Sidvind\PHPRoutes\Router::$variable_formats = static::$variable_formats;

@@ -1,11 +1,20 @@
+<?xml version="1.0"?>
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="http://schema.phpunit.de/4.4/phpunit.xsd"
+         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd"
          bootstrap="../vendor/autoload.php"
-         colors="auto"
+         colors="true"
          beStrictAboutOutputDuringTests="true"
          beStrictAboutTestsThatDoNotTestAnything="true"
          verbose="true">
-
+	<coverage includeUncoveredFiles="true">
+		<include>
+			<directory>../src</directory>
+			<directory>../example</directory>
+		</include>
+		<exclude>
+			<directory>../example/*/tests</directory>
+		</exclude>
+	</coverage>
 	<testsuites>
 		<testsuite name="tests">
 			<directory>.</directory>
@@ -14,14 +23,4 @@
 			<directory>../example</directory>
 		</testsuite>
 	</testsuites>
-
-	<filter>
-		<whitelist addUncoveredFilesFromWhitelist="true">
-			<directory>../src</directory>
-			<directory>../example</directory>
-			<exclude>
-				<directory>../example/*/tests</directory>
-			</exclude>
-		</whitelist>
-	</filter>
 </phpunit>
