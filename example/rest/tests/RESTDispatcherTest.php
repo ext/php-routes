@@ -6,7 +6,7 @@ class RESTDispatcherTest extends \PHPUnit\Framework\TestCase
 {
     protected $status;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->status = -1;
         $this->isAuthenticated = false;

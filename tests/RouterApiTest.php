@@ -2,11 +2,11 @@
 
 namespace RouterApi;
 
-class RouterApiFunctionTest extends \PHPUnit_Framework_TestCase
+class RouterApiFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->router = new \Testing\TestRouter();
     }

@@ -2,11 +2,11 @@
 
 namespace RouterPath;
 
-class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase
+class RouterPathFunctionTest extends \PHPUnit\Framework\TestCase
 {
     public $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->router = new \Sidvind\PHPRoutes\Router();
     }
@@ -89,7 +89,7 @@ class RouterPathFunctionTest extends \PHPUnit_Framework_TestCase
     public function testCallMissing()
     {
         @$this->router->foo_path(); // hack to get coverage for the line after trigger_error
-        $this->expectException(\PHPUnit_Framework_Error::class);
+        $this->expectError();
         $this->router->foo_path();
     }
 

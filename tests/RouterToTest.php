@@ -2,11 +2,11 @@
 
 namespace RouterTo;
 
-class RouterToTest extends \PHPUnit_Framework_TestCase
+class RouterToTest extends \PHPUnit\Framework\TestCase
 {
     public $router;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->router = new \Testing\TestRouter();
     }
