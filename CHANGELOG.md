@@ -1,3 +1,7 @@
+## 1.6.0 (2023-03-25)
+
+* Require PHP 8.1 or later.
+
 ## 1.5.0 (2021-07-09)
 
 * PHP 8.0 compatibility
