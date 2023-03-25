@@ -6,6 +6,7 @@ class AuthenticationDispatcherTest extends \PHPUnit\Framework\TestCase
 {
     protected $status;
     protected $isAuthenticated;
+    protected $router;
 
     public function setUp(): void
     {

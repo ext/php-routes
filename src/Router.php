@@ -272,9 +272,9 @@ class Router
             return false;
         }
         if (!is_array($as)) {
-            return "${as}_path";
+            return "{$as}_path";
         } else {
-            return "${as[0]}_path";
+            return "{$as[0]}_path";
         }
     }
 
