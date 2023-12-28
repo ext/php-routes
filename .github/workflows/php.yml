@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        # note: keep in sync with if-statement on coveralls below
         php-version:
           - "8.1"
           - "8.2"
@@ -36,11 +37,13 @@ jobs:
         run: composer install --prefer-dist --no-progress
 
       - name: PHPUnit
+        run: composer run-script test -- --coverage-clover clover.xml
+
+      - name: Coveralls
+        if: matrix.php-version == '8.2'
+        run: vendor/bin/php-coveralls -v
         env:
           COVERALLS_REPO_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          composer run-script test -- --coverage-clover clover.xml
-          vendor/bin/php-coveralls -v
 
       - name: PHP_CodeSniffer
         run: composer run-script lint
