@@ -9,8 +9,9 @@ jobs:
       matrix:
         # note: keep in sync with if-statement on coveralls below
         php-version:
-          - "8.1"
           - "8.2"
+          - "8.3"
+          - "8.4"
 
     steps:
       - uses: actions/checkout@v5
