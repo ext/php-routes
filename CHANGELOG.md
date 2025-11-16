@@ -1,3 +1,7 @@
+## 1.6.2 (2025-11-16)
+
+* Require PHP 8.2 or later.
+
 ## 1.6.1 (2023-03-25)
 
 * Republish package after botched release
