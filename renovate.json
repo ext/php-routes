@@ -1,18 +1,30 @@
 {
+    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
     "extends": [
-        "config:base",
+        "config:recommended",
         ":automergeBranch",
         ":automergeMinor",
+        ":dependencyDashboard",
         ":gitSignOff",
         ":label(renovate)",
         ":prNotPending",
+        "helpers:pinGitHubActionDigests",
         ":rebaseStalePrs"
     ],
-    "stabilityDays": 1,
+    "lockFileMaintenance": { "enabled": true },
+    "timezone": "Europe/Stockholm",
+    "separateMultipleMajor": true,
+    "minimumReleaseAge": "1 day",
     "packageRules": [
         {
-            "depTypeList": ["dependencies", "peerDependencies"],
+            "matchDepTypes": ["dependencies", "peerDependencies"],
             "semanticCommitType": "fix"
+        },
+        {
+            "description": "workaround for lockfile mainetance pending",
+            "matchUpdateTypes": ["digest", "pinDigest", "lockFileMaintenance"],
+            "minimumReleaseAgeBehaviour": "timestamp-optional",
+            "automerge": true
         }
     ]
 }
