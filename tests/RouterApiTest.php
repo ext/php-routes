@@ -2,7 +2,7 @@
 
 namespace RouterApi;
 
-class RouterApiFunctionTest extends \PHPUnit\Framework\TestCase
+class RouterApiTest extends \PHPUnit\Framework\TestCase
 {
     public $router;
 
