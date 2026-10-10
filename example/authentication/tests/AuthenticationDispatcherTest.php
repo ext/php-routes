@@ -20,14 +20,14 @@ class AuthenticationDispatcherTest extends \PHPUnit\Framework\TestCase
                              ->getMock();
 
         /* mock isAuthenticated call */
-        $this->router->method('isAuthenticated')->will($this->returnCallback(function () {
+        $this->router->method('isAuthenticated')->willReturnCallback(function () {
             return $this->isAuthenticated;
-        }));
+        });
 
         /* mock httpResponseCode call */
-        $this->router->method('httpResponseCode')->will($this->returnCallback(function ($code) {
+        $this->router->method('httpResponseCode')->willReturnCallback(function ($code) {
             $this->status = $code;
-        }));
+        });
     }
 
     public function testRoutes()
