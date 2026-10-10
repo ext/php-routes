@@ -19,9 +19,9 @@ class RESTDispatcherTest extends \PHPUnit\Framework\TestCase
                              ->getMock();
 
         /* mock httpResponseCode call */
-        $this->router->method('httpResponseCode')->will($this->returnCallback(function ($code) {
+        $this->router->method('httpResponseCode')->willReturnCallback(function ($code) {
             $this->status = $code;
-        }));
+        });
     }
 
     public function testRoutes()
