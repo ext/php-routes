@@ -1,3 +1,9 @@
+# CHANGELOG
+
+## 1.7.0
+
+* Require PHP 8.4 or later.
+
 ## 1.6.2 (2025-11-16)
 
 * Require PHP 8.2 or later.
