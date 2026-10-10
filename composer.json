@@ -17,7 +17,8 @@
         "phpunit/phpunit": "9.6.38",
         "squizlabs/php_codesniffer": "4.0.4",
         "php-coveralls/php-coveralls": "2.9.1",
-        "symfony/config": "7.4.17"
+        "symfony/config": "7.4.17",
+        "symfony/console": "7.3.6"
     },
     "autoload": {
         "psr-4": {
