@@ -13,7 +13,7 @@ class RESTDispatcherTest extends \PHPUnit\Framework\TestCase
         $this->status = -1;
         $this->isAuthenticated = false;
         $this->router = $this->getMockBuilder(\Example\REST\Dispatcher::class)
-                             ->setMethods([
+                             ->onlyMethods([
                                  'httpResponseCode',
                              ])
                              ->getMock();

@@ -2,7 +2,7 @@
 
 namespace RouterDispatch;
 
-class RouterDispatchFunctionTest extends \PHPUnit\Framework\TestCase
+class RouterDispatchTest extends \PHPUnit\Framework\TestCase
 {
     private static $variable_formats;
     private static $default_format;
