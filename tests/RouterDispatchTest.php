@@ -55,7 +55,7 @@ class RouterDispatchTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->addRoute('foo', 'PATCH', ['to' => 'Test#action']);
         $match = $this->router->match('/foo', 'GET');
-        $this->assertFalse((boolean)$match);
+        $this->assertFalse((bool)$match);
     }
 
     public function testArgs()
@@ -68,7 +68,7 @@ class RouterDispatchTest extends \PHPUnit\Framework\TestCase
     {
         $this->router->addRoute('foo', 'GET', ['to' => 'Test#action']);
         $match = $this->router->match('/foo.json', 'GET');
-        $this->assertTrue((boolean)$match);
+        $this->assertTrue((bool)$match);
         $this->assertEquals('Test', $match->controller);
         $this->assertEquals('action', $match->action);
         $this->assertEquals([], $match->args);
@@ -272,38 +272,38 @@ class RouterDispatchTest extends \PHPUnit\Framework\TestCase
     public function testVariableFormat()
     {
         $this->router->addRoute(':foo', 'GET', ['to' => '#foo', 'foo_format' => '\d+']);
-        $this->assertTrue((boolean)$this->router->match('/1234', 'GET'));
-        $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
+        $this->assertTrue((bool)$this->router->match('/1234', 'GET'));
+        $this->assertFalse((bool)$this->router->match('/asdf', 'GET'));
     }
 
     public function testVariableFormatStaticDefault()
     {
         \Sidvind\PHPRoutes\Router::$variable_formats['foo'] = '\d+';
         $this->router->addRoute(':foo', 'GET', ['to' => '#foo']);
-        $this->assertTrue((boolean)$this->router->match('/1234', 'GET'));
-        $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
+        $this->assertTrue((bool)$this->router->match('/1234', 'GET'));
+        $this->assertFalse((bool)$this->router->match('/asdf', 'GET'));
     }
 
     public function testVariableFormatGlobalStaticDefault()
     {
         \Sidvind\PHPRoutes\Router::$default_format = '\d+';
         $this->router->addRoute(':foo', 'GET', ['to' => '#foo']);
-        $this->assertTrue((boolean)$this->router->match('/1234', 'GET'));
-        $this->assertFalse((boolean)$this->router->match('/asdf', 'GET'));
+        $this->assertTrue((bool)$this->router->match('/1234', 'GET'));
+        $this->assertFalse((bool)$this->router->match('/asdf', 'GET'));
     }
 
     public function testArbitraryOptions()
     {
         $this->router->addRoute('foo/:id', 'GET', ['to' => '#foo', 'id_format' => '\d+', 'foo' => 'bar']);
         $match = $this->router->match('/foo/12', 'GET');
-        $this->assertTrue((boolean)$match, "URL should match a route");
+        $this->assertTrue((bool)$match, "URL should match a route");
         $this->assertEquals(['foo' => 'bar'], $match->options, "Match options should be set");
     }
 
     protected function assertMatch($url, $method, $controller, $action, array $args = [])
     {
         $match = $this->router->match($url, $method);
-        $this->assertTrue((boolean)$match, "URL {$url} should match a route");
+        $this->assertTrue((bool)$match, "URL {$url} should match a route");
         $this->assertEquals($controller, $match->controller, 'Controller name');
         $this->assertEquals($action, $match->action, 'Action name');
         $this->assertEquals($args, $match->args, 'Arguments');
@@ -312,6 +312,6 @@ class RouterDispatchTest extends \PHPUnit\Framework\TestCase
     protected function assertNotMatch($url, $method)
     {
         $match = $this->router->match($url, $method);
-        $this->assertFalse((boolean)$match, "URL {$url} should not match a route");
+        $this->assertFalse((bool)$match, "URL {$url} should not match a route");
     }
 }

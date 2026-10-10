@@ -12,12 +12,12 @@ class AuthenticationDispatcherTest extends \PHPUnit\Framework\TestCase
     {
         $this->status = -1;
         $this->isAuthenticated = false;
-        $this->router = $this->getMockBuilder(\Example\Authentication\Dispatcher::class)
+        $this->router = $this->getStubBuilder(\Example\Authentication\Dispatcher::class)
                              ->onlyMethods([
                                  'isAuthenticated',
                                  'httpResponseCode',
                              ])
-                             ->getMock();
+                             ->getStub();
 
         /* mock isAuthenticated call */
         $this->router->method('isAuthenticated')->willReturnCallback(function () {
